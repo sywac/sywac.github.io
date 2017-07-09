@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Quick Start - Sywac Docs</title>
+  <meta name="viewport" content="width=device-width">
+  <meta property="og:title" content="Quick Start - Sywac Docs">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://sywac.io">
+  <meta property="og:description" content="A better CLI framework, made for the ES2015 era.">
+  <link rel="stylesheet" href="/css/sywac.css">
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css"></head>
+
+<body>
+  <div class="container">
+    <div class="nav-main">
+  <div class="wrap">
+    <a class="nav-home" href="/"><img class="nav-logo" src="/logo_purple.png" height="50"></a>
+    <ul class="nav-site">
+      <li><a href="/docs" class="active">Docs</a></li>
+      <li><a href="/about" class="">About</a></li>
+      <li><a href="https://github.com/sywac/sywac" class="">GitHub</a></li>
+    </ul>
+  </div>
+</div>
+
+    <section class="content wrap documentationContent">
+      <!-- start "body" in layout.ejs -->
+      <div class="inner-content">
+  <!-- start "page.content" in page.ejs -->
+  <h1 id="Quick-Start-Guide"><a href="#Quick-Start-Guide" class="headerlink" title="Quick Start Guide"></a>Quick Start Guide</h1><p>First install sywac from npm:</p>
+<pre class=" language-bash"><code class="language-bash">$ <span class="token function">npm</span> <span class="token function">install</span> --save sywac
+</code></pre>
+<p>Then create a <code>cli.js</code> file with code similar to this:</p>
+<pre class=" language-javascript"><code class="language-javascript">#<span class="token operator">!</span><span class="token operator">/</span>usr<span class="token operator">/</span>bin<span class="token operator">/</span>env node
+<span class="token string">'use strict'</span>
+
+<span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">positional</span><span class="token punctuation">(</span><span class="token string">'&lt;string>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> paramsDesc<span class="token punctuation">:</span> <span class="token string">'A required string argument'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">boolean</span><span class="token punctuation">(</span><span class="token string">'-b, --bool'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> desc<span class="token punctuation">:</span> <span class="token string">'A boolean option'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">number</span><span class="token punctuation">(</span><span class="token string">'-n, --num &lt;number>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> desc<span class="token punctuation">:</span> <span class="token string">'A number option'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">help</span><span class="token punctuation">(</span><span class="token string">'-h, --help'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token string">'-v, --version'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">showHelpByDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">outputSettings</span><span class="token punctuation">(</span><span class="token punctuation">{</span> maxWidth<span class="token punctuation">:</span> <span class="token number">75</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">parseAndExit</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>argv <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>JSON<span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>argv<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Make the <code>cli.js</code> file executable:</p>
+<pre class=" language-bash"><code class="language-bash">$ <span class="token function">chmod</span> +x cli.js
+</code></pre>
+<p>And set up <code>cli.js</code> as the <code>&quot;bin&quot;</code> field in <code>package.json</code>:</p>
+<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"example"</span><span class="token punctuation">,</span>
+  <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"0.1.0"</span><span class="token punctuation">,</span>
+  <span class="token property">"bin"</span><span class="token operator">:</span> <span class="token string">"cli.js"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Then test it out. Without any arguments, it will print the help text.</p>
+<pre class=" language-bash"><code class="language-bash">$ ./cli.js
+Usage: cli <span class="token operator">&lt;</span>string<span class="token operator">></span> <span class="token punctuation">[</span>options<span class="token punctuation">]</span>
+
+Arguments:
+  <span class="token operator">&lt;</span>string<span class="token operator">></span>  A required string argument                  <span class="token punctuation">[</span>required<span class="token punctuation">]</span> <span class="token punctuation">[</span>string<span class="token punctuation">]</span>
+
+Options:
+  -b, --bool          A boolean option                            <span class="token punctuation">[</span>boolean<span class="token punctuation">]</span>
+  -n, --num <span class="token operator">&lt;</span>number<span class="token operator">></span>  A number option                              <span class="token punctuation">[</span>number<span class="token punctuation">]</span>
+  -h, --help          Show <span class="token function">help</span>                  <span class="token punctuation">[</span>commands: help<span class="token punctuation">]</span> <span class="token punctuation">[</span>boolean<span class="token punctuation">]</span>
+  -v, --version       Show version number     <span class="token punctuation">[</span>commands: version<span class="token punctuation">]</span> <span class="token punctuation">[</span>boolean<span class="token punctuation">]</span>
+</code></pre>
+<p>Let’s try passing some arguments:</p>
+<pre class=" language-bash"><code class="language-bash">$ ./cli.js hello -b -n 42
+<span class="token punctuation">{</span>
+  <span class="token string">"_"</span><span class="token keyword">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>,
+  <span class="token string">"string"</span><span class="token keyword">:</span> <span class="token string">"hello"</span>,
+  <span class="token string">"b"</span><span class="token keyword">:</span> true,
+  <span class="token string">"bool"</span><span class="token keyword">:</span> true,
+  <span class="token string">"n"</span><span class="token keyword">:</span> 42,
+  <span class="token string">"num"</span><span class="token keyword">:</span> 42,
+  <span class="token string">"h"</span><span class="token keyword">:</span> false,
+  <span class="token string">"help"</span><span class="token keyword">:</span> false,
+  <span class="token string">"v"</span><span class="token keyword">:</span> false,
+  <span class="token string">"version"</span><span class="token keyword">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>What happens if we pass flags without a string argument?</p>
+<pre class=" language-bash"><code class="language-bash">$ ./cli.js --bool
+Usage: cli <span class="token operator">&lt;</span>string<span class="token operator">></span> <span class="token punctuation">[</span>options<span class="token punctuation">]</span>
+
+Arguments:
+  <span class="token operator">&lt;</span>string<span class="token operator">></span>  A required string argument                  <span class="token punctuation">[</span>required<span class="token punctuation">]</span> <span class="token punctuation">[</span>string<span class="token punctuation">]</span>
+
+Options:
+  -b, --bool          A boolean option                            <span class="token punctuation">[</span>boolean<span class="token punctuation">]</span>
+  -n, --num <span class="token operator">&lt;</span>number<span class="token operator">></span>  A number option                              <span class="token punctuation">[</span>number<span class="token punctuation">]</span>
+  -h, --help          Show <span class="token function">help</span>                  <span class="token punctuation">[</span>commands: help<span class="token punctuation">]</span> <span class="token punctuation">[</span>boolean<span class="token punctuation">]</span>
+  -v, --version       Show version number     <span class="token punctuation">[</span>commands: version<span class="token punctuation">]</span> <span class="token punctuation">[</span>boolean<span class="token punctuation">]</span>
+
+Missing required argument: string
+</code></pre>
+<p>Validation failed and sywac printed the help text with an error message. Let’s check the exit code of that last run:</p>
+<pre class=" language-bash"><code class="language-bash">$ <span class="token keyword">echo</span> <span class="token variable">$?</span>
+1
+</code></pre>
+<p>This is a good sign that our CLI will play well with others.</p>
+<p>Now continue to other pages for more detailed info about the API.</p>
+
+  <!-- end "page.content" in page.ejs -->
+  
+  <div class="docs-prevnext">
+    
+    <a class="docs-prev" href="/">← Previous</a>
+    
+    
+    <a class="docs-next" href="/docs/api-and-types.html">Next →</a>
+    
+  </div>
+  
+</div>
+
+      <!-- end "body" in layout.ejs -->
+      
+      <div class="nav-docs">
+  <div class="nav-docs-section">
+    <h3>General API</h3>
+    <ul>
+      <li><a style="margin-left:0;" class="active" href="/docs">Quick Start Guide</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/api-and-types.html">API Instance and Types</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/sync-config.html">Synchronous Configuration</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/async-parsing.html">Asynchronous Parsing, Validation, Execution</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/help-text.html">Help Text</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/style-hooks.html">Style Hooks</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/error-handling.html">Error Handling</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/concurrency.html">Concurrency</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/context.html">Context</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/advanced-customizations.html">Advanced Customizations</a></li>
+    </ul>
+  </div>
+  <div class="nav-docs-section">
+    <h3>Types</h3>
+    <ul>
+      <li><a style="margin-left:0;" class="" href="/docs/info-types.html">General Type Info</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/type-lifecycle.html">Type Lifecycle</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/type-properties.html">Common Type Properties</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/boolean-type.html">Boolean</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/help-version-type.html">Help and Version</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/number-type.html">Number</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/string-type.html">String</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/path-type.html">Path / File / Dir</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/enum-type.html">Enum</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/array-type.html">Array</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/unknown-type.html">"Unknown" Type</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/positional-type.html">Positionals</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/command-type.html">Commands</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/custom-types.html">Custom Types</a></li>
+    </ul>
+  </div>
+  <div class="nav-docs-section">
+    <h3>Commands</h3>
+    <ul>
+      <li><a style="margin-left:0;" class="" href="/docs/command-lifecycle.html">Command Lifecycle</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/command-positionals.html">With Positionals</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/command-setup.html">Synchronous Setup Handler</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/command-run.html">Asynchronous Run Handler</a></li>
+      <li><a style="margin-left:0;" class="" href="/docs/command-modules.html">Command Modules</a></li>
+    </ul>
+  </div>
+</div>
+
+      
+    </section>
+    <footer>
+  <span>See an error? <a href="https://github.com/sywac/sywac-website/tree/master/source/docs/index.md">Contribute to this docs site!</a></span>
+  <span>Made with ♡ by <a href="https://github.com/nexdrew">nexdrew</a></span>
+</footer>
+
+  </div>
+</body>
+</html>
