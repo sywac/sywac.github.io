@@ -46,10 +46,133 @@
       <!-- start "body" in layout.ejs -->
       <div class="inner-content">
   <!-- start "page.content" in page.ejs -->
-  <h1 id="API-Instance-and-Types"><a href="#API-Instance-and-Types" class="headerlink" title="API Instance and Types"></a>API Instance and Types</h1><blockquote>
-<p>No content yet</p>
-<p>Sorry! This site is still under construction. Please bear with us until we can fill out more documentation. Thank you!</p>
-</blockquote>
+  <h1 id="API-Instance-and-Types"><a href="#API-Instance-and-Types" class="headerlink" title="API Instance and Types"></a>API Instance and Types</h1><p>The engine and primary API of sywac is represented by an <code>Api</code> instance, which is exposed in one of two ways:</p>
+<ol>
+<li><p>Via the main export, as a singleton:</p>
+<pre class=" language-js"><code class="language-js"> <span class="token comment" spellcheck="true">// sywac is a singleton Api instance</span>
+ <span class="token keyword">const</span> sywac <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac'</span><span class="token punctuation">)</span>
+</code></pre>
+</li>
+<li><p>Via the <code>Api</code> class:</p>
+<pre class=" language-js"><code class="language-js"> <span class="token keyword">const</span> Api <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac/api'</span><span class="token punctuation">)</span>
+ <span class="token keyword">const</span> sywac <span class="token operator">=</span> Api<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// or new Api()</span>
+</code></pre>
+</li>
+</ol>
+<p>An <code>Api</code> instance represents a parsing configuration, which consists primarily of a set of <code>Type</code> instances.</p>
+<p>Each <code>Type</code> instance represents one argument or option, along with its datatype, expected by the app.</p>
+<p>An option is always specified by a flag (e.g. <code>--flag</code> or <code>-f</code> or <code>--key value</code> or <code>--key=value</code>) while an argument is generally specified by position alone (e.g. <code>program &lt;argument&gt;</code>), which is why they’re referred to as <em>positional</em> arguments or just <em>positionals</em>. For convenience, positional arguments in sywac may also be specified via flag, as long as you define them that way (e.g. <code>program [--arg] &lt;argument&gt;</code>).</p>
+<p>The following table lists the types built into sywac along with the <code>Api</code> method(s) used to define/add them. Note that you can also <a href="/docs/custom-types.html">add your own types</a> to sywac.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Type</strong></th>
+<th><strong><code>Api</code> methods</strong></th>
+<th><strong>Factory name</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/docs/boolean-type.html">Boolean</a> option</td>
+<td><code>.boolean(flags, opts)</code></td>
+<td><code>&#39;boolean&#39;</code></td>
+</tr>
+<tr>
+<td><a href="/docs/string-type.html">String</a> option</td>
+<td><code>.string(flags, opts)</code></td>
+<td><code>&#39;string&#39;</code></td>
+</tr>
+<tr>
+<td><a href="/docs/number-type.html">Number</a> option</td>
+<td><code>.number(flags, opts)</code></td>
+<td><code>&#39;number&#39;</code></td>
+</tr>
+<tr>
+<td><a href="/docs/path-type.html">Path</a> option</td>
+<td><code>.path(flags, opts)</code></td>
+<td><code>&#39;path&#39;</code></td>
+</tr>
+<tr>
+<td>File option (see <a href="/docs/path-type.html">Path</a>)</td>
+<td><code>.file(flags, otps)</code></td>
+<td><code>&#39;file&#39;</code></td>
+</tr>
+<tr>
+<td>Directory option (see <a href="/docs/path-type.html">Path</a>)</td>
+<td><code>.dir(flags, opts)</code></td>
+<td><code>&#39;dir&#39;</code></td>
+</tr>
+<tr>
+<td><a href="/docs/enum-type.html">Enum</a> option</td>
+<td><code>.enumeration(flags, opts)</code></td>
+<td><code>&#39;enum&#39;</code></td>
+</tr>
+<tr>
+<td><a href="/docs/array-type.html">Array</a> of strings option</td>
+<td><code>.array(flags, opts)</code><br><code>.stringArray(flags, opts)</code></td>
+<td><code>&#39;array&#39;</code></td>
+</tr>
+<tr>
+<td><a href="/docs/array-type.html">Array</a> of numbers option</td>
+<td><code>.numberArray(flags, opts)</code></td>
+<td><code>&#39;array&#39;</code></td>
+</tr>
+<tr>
+<td><a href="/docs/help-version-type.html">Help</a> option</td>
+<td><code>.help(flags, opts)</code></td>
+<td><code>&#39;helpType&#39;</code></td>
+</tr>
+<tr>
+<td><a href="/docs/help-version-type.html">Version</a> option</td>
+<td><code>.version(flags, opts)</code></td>
+<td><code>&#39;versionType&#39;</code></td>
+</tr>
+<tr>
+<td><a href="/docs/positional-type.html">Positional</a> arguments<br>(without command)</td>
+<td><code>.positional(dsl, opts)</code></td>
+<td><code>&#39;positional&#39;</code></td>
+</tr>
+<tr>
+<td><a href="/docs/command-positionals.html">Command</a> (with or without<br>positionals)</td>
+<td><code>.command(dsl, opts)</code></td>
+<td><code>&#39;commandType&#39;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Any unexpected/undeclared arguments or options encountered during parsing will automatically be handled by a special <a href="/docs/unknown-type.html">“Unknown” type</a>.</p>
+<p>For further details on the <code>flags</code> and <code>opts</code> method parameters, see <a href="/docs/info-types.html">General Type Info</a>.</p>
+<p>Internally, the <code>Api</code> instance maps type names to factory methods, which allows for the following:</p>
+<ol>
+<li><p>Any option type that does not have an explicit <code>Api</code> method (e.g. array of enums) may be added via the <code>.option(flags, opts)</code> method, specifying the <code>type</code> in <code>opts</code>:</p>
+<pre class=" language-js"><code class="language-js"> sywac<span class="token punctuation">.</span><span class="token function">option</span><span class="token punctuation">(</span><span class="token string">'-l, --lang &lt;languages..>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+   type<span class="token punctuation">:</span> <span class="token string">'array:enum'</span><span class="token punctuation">,</span>
+   desc<span class="token punctuation">:</span> <span class="token string">'Choose one or more programming languages'</span><span class="token punctuation">,</span>
+   choices<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'js'</span><span class="token punctuation">,</span> <span class="token string">'java'</span><span class="token punctuation">,</span> <span class="token string">'go'</span><span class="token punctuation">,</span> <span class="token string">'ruby'</span><span class="token punctuation">,</span> <span class="token string">'rust'</span><span class="token punctuation">]</span>
+ <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+</li>
+<li><p>Positional arguments can specify their types via DSL string:</p>
+<pre class=" language-js"><code class="language-js"> sywac<span class="token punctuation">.</span><span class="token function">positional</span><span class="token punctuation">(</span><span class="token string">'&lt;arg:file>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+   paramsDesc<span class="token punctuation">:</span> <span class="token string">'A file that must exist on the local file system'</span><span class="token punctuation">,</span>
+   mustExist<span class="token punctuation">:</span> <span class="token boolean">true</span>
+ <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+</li>
+<li><p>You can register your own types or override the default ones:</p>
+<pre class=" language-js"><code class="language-js"> <span class="token keyword">const</span> TypeString <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac/types/string'</span><span class="token punctuation">)</span>
+ <span class="token keyword">class</span> <span class="token class-name">CustomString</span> <span class="token keyword">extends</span> <span class="token class-name">TypeString</span> <span class="token punctuation">{</span>
+   <span class="token keyword">get</span> datatype <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">return</span> <span class="token string">'custom'</span>
+   <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+ <span class="token comment" spellcheck="true">// registering a factory for 'string' means that .string(flags, opts)</span>
+ <span class="token comment" spellcheck="true">// will now use CustomString instead of the built-in TypeString</span>
+ sywac<span class="token punctuation">.</span><span class="token function">registerFactory</span><span class="token punctuation">(</span><span class="token string">'string'</span><span class="token punctuation">,</span> opts <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">CustomString</span><span class="token punctuation">(</span>opts<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+</li>
+</ol>
+<p>All configuration methods on an <code>Api</code> instance return the instance and so can be chained together. See <a href="/docs/sync-config.html">Synchronous Configuration</a> for the full API of configuration methods.</p>
+<p>Once an <code>Api</code> is fully configured, you can parse program arguments or any string/message (e.g. for a chatbot) via the asynchronous <code>.parse(args)</code> or <code>.parseAndExit(args)</code> methods. If no args are given, <code>process.argv</code> will be parsed by default. Each method returns a <code>Promise</code> that resolves once parsing, validation, and command execution (if any) completes. See <a href="/docs/async-parsing.html">Asynchronous Parsing, Validation, Execution</a> for further details.</p>
 
   <!-- end "page.content" in page.ejs -->
   
