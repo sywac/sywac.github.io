@@ -46,10 +46,354 @@
       <!-- start "body" in layout.ejs -->
       <div class="inner-content">
   <!-- start "page.content" in page.ejs -->
-  <h1 id="Comparison-Matrix"><a href="#Comparison-Matrix" class="headerlink" title="Comparison Matrix"></a>Comparison Matrix</h1><blockquote>
-<p>No content yet</p>
-<p>Sorry! This site is still under construction. Please bear with us until we can fill out more documentation. Thank you!</p>
-</blockquote>
+  <h1 id="Comparison-Matrix"><a href="#Comparison-Matrix" class="headerlink" title="Comparison Matrix"></a>Comparison Matrix</h1><table>
+<thead>
+<tr>
+<th><strong>Feature</strong></th>
+<th><strong>sywac</strong>@1.0.0</th>
+<th><strong>yargs</strong>@8.0.2</th>
+<th><strong>commander</strong>@2.11.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parsing</td>
+<td>Async</td>
+<td>Sync</td>
+<td>Sync</td>
+</tr>
+<tr>
+<td>Custom parsing</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Validation</td>
+<td>Async</td>
+<td>Sync</td>
+<td>Sync</td>
+</tr>
+<tr>
+<td>Custom validation</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Command execution</td>
+<td>Async, awaits completion</td>
+<td>Sync, fire-and-forget</td>
+<td>Sync, fire-and-forget</td>
+</tr>
+<tr>
+<td>Commands inline</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Commands via file/module</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Commands via directory</td>
+<td><a href="/about/roadmap.html">On roadmap</a></td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Arbitrary levels of nested commands</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Default command</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Command aliases</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Commands with positional arguments</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Positional arguments without a command</td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Positional argument aliases</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Positional arguments with optional flags</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Define types for positional arguments</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Variadic positional arguments</td>
+<td>Anywhere</td>
+<td>Last positional only</td>
+<td>Last positional only</td>
+</tr>
+<tr>
+<td>Descriptions for positional arguments in help text</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Auto-generated help text</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Override auto-generated help text</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Customize auto-generated help text piece-meal</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Style help text differently for errors</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Placeholders for flagged options in help text</td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Built-in support for i18n</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Built-in support for showing help text by default (i.e. no args)</td>
+<td>✅</td>
+<td>Only via validation</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Custom grouping of options in help text</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Custom grouping of commands in help text</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Custom coercion of argument/option values</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Validate user input before applying coercion</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Array options</td>
+<td>✅</td>
+<td>✅</td>
+<td>Only via custom coercion</td>
+</tr>
+<tr>
+<td>Define subtype for array option</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Array parsing supports comma (or other delimiter) separated values</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Number options</td>
+<td>✅</td>
+<td>✅</td>
+<td>Only via custom coercion</td>
+</tr>
+<tr>
+<td>Path/file/directory options</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Count options</td>
+<td>Only via custom type</td>
+<td>✅</td>
+<td>Only via custom coercion</td>
+</tr>
+<tr>
+<td>Enum/choices options</td>
+<td>✅</td>
+<td>✅</td>
+<td>Via <code>RegExp</code> or custom coercion</td>
+</tr>
+<tr>
+<td>Config file options</td>
+<td>Only via custom type</td>
+<td>✅</td>
+<td>Only via custom coercion</td>
+</tr>
+<tr>
+<td>Customize special <code>--help</code> option</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Customize special <code>--version</code> option</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Auto package version lookup</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Ability to plug in customized components</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Support for ignorables in positional argument DSL</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Parsing result provides details of where argument/option value came from</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Implies/conflicts option validation</td>
+<td>Only via custom check</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Converts multi-word aliases to camelCase</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Parses environment variables</td>
+<td><a href="/about/roadmap.html">On roadmap</a></td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Lookup program config in package.json</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Parsing supports dot-notation for object properties</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Parsing supports <code>--no-</code> prefix for boolean negation</td>
+<td><a href="/about/roadmap.html">On roadmap</a></td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ability to recommend commands on no command match</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Parsing of undeclared options</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Parses <code>process.argv</code> by default</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Parsing accepts strings</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Populates parsing result with all aliases</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Number of packages installed during <code>npm install</code></td>
+<td>1</td>
+<td>69</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Compatible with Node.js versions</td>
+<td>4+</td>
+<td>4+</td>
+<td>All</td>
+</tr>
+</tbody>
+</table>
 
   <!-- end "page.content" in page.ejs -->
   
