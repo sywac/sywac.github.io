@@ -46,9 +46,190 @@
       <!-- start "body" in layout.ejs -->
       <div class="inner-content">
   <!-- start "page.content" in page.ejs -->
-  <h1 id="Synchronous-Configuration"><a href="#Synchronous-Configuration" class="headerlink" title="Synchronous Configuration"></a>Synchronous Configuration</h1><blockquote>
-<p>No content yet</p>
-<p>Sorry! This site is still under construction. Please bear with us until we can fill out more documentation. Thank you!</p>
+  <h1 id="Synchronous-Configuration"><a href="#Synchronous-Configuration" class="headerlink" title="Synchronous Configuration"></a>Synchronous Configuration</h1><p>The API of sywac can be logically separated into two stages of an app’s lifecycle: First is <em>configuration</em>, and second is <em>execution</em>.</p>
+<p>This page covers all the methods designed for the configuration stage. Use these methods to configure an <a href="/docs/api-and-types.html"><code>Api</code> instance</a>, which mainly consists of telling it what types to expect (e.g. arguments, options, and commands), defining validation and control flow, and tweaking help text settings.</p>
+<p>The following methods are listed in alphabetical order.</p>
+<p><a href="#array">.array(flags, opts)</a><br><a href="#boolean">.boolean(flags, opts)</a><br><a href="#check">.check(handler)</a><br><a href="#command">.command(dsl, opts)</a><br><a href="#configure">.configure(opts)</a><br><a href="#custom">.custom(type)</a><br><a href="#dir">.dir(flags, opts)</a><br><a href="#enumeration">.enumeration(flags, opts)</a><br><a href="#epilogue">.epilogue(epilogue)</a><br><a href="#example">.example(example, opts)</a><br><a href="#exampleOrder">.exampleOrder(orderArray)</a><br><a href="#file">.file(flags, opts)</a><br><a href="#groupOrder">.groupOrder(orderArray)</a><br><a href="#help">.help(flags, opts)</a><br><a href="#number">.number(flags, opts)</a><br><a href="#numberArray">.numberArray(flags, opts)</a><br><a href="#option">.option(flags, opts)</a><br><a href="#outputSettings">.outputSettings(settings)</a><br><a href="#path">.path(flags, opts)</a><br><a href="#positional">.positional(dsl, opts)</a><br><a href="#preface">.preface(icon, slogan)</a><br><a href="#registerFactory">.registerFactory(name, factory)</a><br><a href="#showHelpByDefault">.showHelpByDefault(boolean)</a><br><a href="#string">.string(flags, opts)</a><br><a href="#stringArray">.stringArray(flags, opts)</a><br><a href="#style">.style(hooks)</a><br><a href="#usage">.usage(usage)</a><br><a href="#version">.version(flags, opts)</a></p>
+<p><a name="array"></a></p>
+<h2 id="array-flags-opts"><a href="#array-flags-opts" class="headerlink" title=".array(flags, opts)"></a><code>.array(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as an array.</p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, no default</p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-a, --array &lt;values..&gt;&#39;</code> would allow <code>-a</code> or <code>--array</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>In addition to <a href="/docs/type-properties.html">common type properties</a>, the object may also define:</p>
+<ul>
+<li><p>&nbsp;<code>delimiter</code> or <code>delim</code>: string or RegExp, default <code>&#39;,&#39;</code></p>
+<p>A delimiter used to split a single value into multiple values during parsing.</p>
+<p>For example, parsing <code>-a one,two</code> would add values <code>&#39;one&#39;</code> and <code>&#39;two&#39;</code> to the array instead of <code>&#39;one,two&#39;</code>.</p>
+</li>
+<li><p><code>cumulative</code>: boolean, default <code>true</code></p>
+<p>If a flag is given multiple times, should the array value include all values from all flags (default) or only use the value(s) from the last flag given?</p>
+<p>For example, parsing <code>-a one two -a three four</code> in cumulative mode would result in an array value of <code>[&#39;one&#39;, &#39;two&#39;, &#39;three&#39;, &#39;four&#39;]</code>. If you turn this off, the result would be only <code>[&#39;three&#39;, &#39;four&#39;]</code>.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>See <a href="/docs/array-type.html">Array</a> for further details and examples.</p>
+<p><a name="boolean"></a></p>
+<h2 id="boolean-flags-opts"><a href="#boolean-flags-opts" class="headerlink" title=".boolean(flags, opts)"></a><code>.boolean(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as a boolean.</p>
+<ul>
+<li><p><code>flags</code>: string, no default</p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-b, --bool&#39;</code> would allow <code>-b</code> or <code>--bool</code> to be given when parsing.</p>
+</li>
+<li><p><code>opts</code>: object, no default</p>
+<p>See <a href="/docs/type-properties.html">common type properties</a>.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>See <a href="/docs/boolean-type.html">Boolean</a> for further details and examples.</p>
+<p><a name="check"></a></p>
+<h2 id="check-handler"><a href="#check-handler" class="headerlink" title=".check(handler)"></a><code>.check(handler)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Define any custom validation logic to run after all types have been parsed, validated, and coerced. The handler will not be called if help or version are explicitly requested.</p>
+<ul>
+<li><p><code>handler</code>: function, no default</p>
+<p>An asynchronous function (may return a <code>Promise</code>) which may perform custom validation before control is returned to app logic.</p>
+<p>The function should report validation errors using the <code>context.cliMessage(msg)</code> method. If the function throws or returns a rejected <code>Promise</code>, an unexpected error will be given in resolved parsing results. If no messages are added to the <code>context</code> and the handler doesn’t throw or return a rejected <code>Promise</code>, validation is assumed to be successful. If the function returns a <code>Promise</code>, sywac will wait until it resolves or rejects before continuing.</p>
+<p>This function will be passed the following two arguments:</p>
+<ul>
+<li><p><code>argv</code>: object</p>
+<p>An object representing parsed, validated, and coerced values. Each object property represents a mapping of alias to parsed value for each expected or encountered type.</p>
+</li>
+<li><p><code>context</code>: <a href="/docs/context.html">Context</a></p>
+<p>An instance representing the state of parsing and execution. Validation errors should be reported via the <code>cliMessage(msg)</code> method.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p><a name="command"></a></p>
+<h2 id="command-dsl-opts"><a href="#command-dsl-opts" class="headerlink" title=".command(dsl, opts)"></a><code>.command(dsl, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a command that should be executed when encountered during parsing.</p>
+<ul>
+<li><p><code>dsl</code>: string or module/object, no default</p>
+<p>If <code>dsl</code> is a string, it defines the canonical alias of the command and any positional arguments the command may accept. The first word in the string represents the canonical alias and any subsequent content will be treated as positional arguments.</p>
+<p>If <code>dsl</code> is an object, the dsl string should be specified via the <code>flags</code> property (similar to other types).</p>
+<p>If the canonical alias is <code>*</code>, the command will be considered a default command and will be hidden from help text unless a non-default alias is defined in <code>opts</code>.</p>
+<p>Since the dsl string will be used in help text (by default), it may contain content that should not be treated as explicit positional args, as long as you specify the <code>ignore</code> option in <code>opts</code>.</p>
+</li>
+<li><p><code>opts</code>: object or function, no default</p>
+<p>If <code>opts</code> is an object, it defines configuration for the command.</p>
+<p>If <code>opts</code> is a function, it specifies the <a href="/docs/command-run.html">run handler</a> of the command without any detailed configuration.</p>
+<p>The following configuration properties are supported:</p>
+<ul>
+<li><code>flags</code>, <code>aliases</code>, <code>description</code>/<code>desc</code>, <code>hints</code>, <code>group</code>, <code>hidden</code> from <a href="/docs/type-properties.html">common type properties</a></li>
+<li><code>params</code>: array of objects</li>
+<li><code>paramsDsl</code>: string</li>
+<li><code>paramsDescription</code> or <code>paramsDesc</code>: string</li>
+<li><code>paramsGroup</code>: string</li>
+<li><code>ignore</code>: string or array of strings</li>
+<li><code>setup</code>: function, defines the <a href="/docs/command-setup.html">setup handler</a></li>
+<li><code>run</code>: function, defines the <a href="/docs/command-run.html">run handler</a></li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Commands are a big topic. See <a href="/docs/command-type.html">Command</a> or any of the COMMANDS pages for further details and examples.</p>
+<p><a name="configure"></a></p>
+<h2 id="configure-opts"><a href="#configure-opts" class="headerlink" title=".configure(opts)"></a><code>.configure(opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="custom"></a></p>
+<h2 id="custom-type"><a href="#custom-type" class="headerlink" title=".custom(type)"></a><code>.custom(type)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="dir"></a></p>
+<h2 id="dir-flags-opts"><a href="#dir-flags-opts" class="headerlink" title=".dir(flags, opts)"></a><code>.dir(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="enumeration"></a></p>
+<h2 id="enumeration-flags-opts"><a href="#enumeration-flags-opts" class="headerlink" title=".enumeration(flags, opts)"></a><code>.enumeration(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="epilogue"></a></p>
+<h2 id="epilogue-epilogue"><a href="#epilogue-epilogue" class="headerlink" title=".epilogue(epilogue)"></a><code>.epilogue(epilogue)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="example"></a></p>
+<h2 id="example-example-opts"><a href="#example-example-opts" class="headerlink" title=".example(example, opts)"></a><code>.example(example, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="exampleOrder"></a></p>
+<h2 id="exampleOrder-orderArray"><a href="#exampleOrder-orderArray" class="headerlink" title=".exampleOrder(orderArray)"></a><code>.exampleOrder(orderArray)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="file"></a></p>
+<h2 id="file-flags-opts"><a href="#file-flags-opts" class="headerlink" title=".file(flags, opts)"></a><code>.file(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="groupOrder"></a></p>
+<h2 id="groupOrder-orderArray"><a href="#groupOrder-orderArray" class="headerlink" title=".groupOrder(orderArray)"></a><code>.groupOrder(orderArray)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="help"></a></p>
+<h2 id="help-flags-opts"><a href="#help-flags-opts" class="headerlink" title=".help(flags, opts)"></a><code>.help(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="number"></a></p>
+<h2 id="number-flags-opts"><a href="#number-flags-opts" class="headerlink" title=".number(flags, opts)"></a><code>.number(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="numberArray"></a></p>
+<h2 id="numberArray-flags-opts"><a href="#numberArray-flags-opts" class="headerlink" title=".numberArray(flags, opts)"></a><code>.numberArray(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="option"></a></p>
+<h2 id="option-flags-opts"><a href="#option-flags-opts" class="headerlink" title=".option(flags, opts)"></a><code>.option(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="outputSettings"></a></p>
+<h2 id="outputSettings-settings"><a href="#outputSettings-settings" class="headerlink" title=".outputSettings(settings)"></a><code>.outputSettings(settings)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="path"></a></p>
+<h2 id="path-flags-opts"><a href="#path-flags-opts" class="headerlink" title=".path(flags, opts)"></a><code>.path(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="positional"></a></p>
+<h2 id="positional-dsl-opts"><a href="#positional-dsl-opts" class="headerlink" title=".positional(dsl, opts)"></a><code>.positional(dsl, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="preface"></a></p>
+<h2 id="preface-icon-slogan"><a href="#preface-icon-slogan" class="headerlink" title=".preface(icon, slogan)"></a><code>.preface(icon, slogan)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="registerFactory"></a></p>
+<h2 id="registerFactory-name-factory"><a href="#registerFactory-name-factory" class="headerlink" title=".registerFactory(name, factory)"></a><code>.registerFactory(name, factory)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="showHelpByDefault"></a></p>
+<h2 id="showHelpByDefault-boolean"><a href="#showHelpByDefault-boolean" class="headerlink" title=".showHelpByDefault(boolean)"></a><code>.showHelpByDefault(boolean)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="string"></a></p>
+<h2 id="string-flags-opts"><a href="#string-flags-opts" class="headerlink" title=".string(flags, opts)"></a><code>.string(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="stringArray"></a></p>
+<h2 id="stringArray-flags-opts"><a href="#stringArray-flags-opts" class="headerlink" title=".stringArray(flags, opts)"></a><code>.stringArray(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="style"></a></p>
+<h2 id="style-hooks"><a href="#style-hooks" class="headerlink" title=".style(hooks)"></a><code>.style(hooks)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="usage"></a></p>
+<h2 id="usage-usage"><a href="#usage-usage" class="headerlink" title=".usage(usage)"></a><code>.usage(usage)</code></h2><blockquote>
+<p>Needs docs!</p>
+</blockquote>
+<p><a name="version"></a></p>
+<h2 id="version-flags-opts"><a href="#version-flags-opts" class="headerlink" title=".version(flags, opts)"></a><code>.version(flags, opts)</code></h2><blockquote>
+<p>Needs docs!</p>
 </blockquote>
 
   <!-- end "page.content" in page.ejs -->
