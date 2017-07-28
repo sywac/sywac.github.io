@@ -218,7 +218,7 @@ sywac<span class="token punctuation">.</span><span class="token function">comman
 <p>The following properties are supported:</p>
 <ul>
 <li><p>&nbsp;<code>name</code>: string, default is basename of <code>process.argv[1]</code></p>
-<p>Explicitly define the name of the program to use in help text. This value will be used in place of <code>$0</code> in <a href="#usage">usage</a> content.</p>
+<p>Explicitly define the name of the program to use in help text. This value will be used in place of <code>$0</code> in <a href="#usage">usage</a> content or <a href="#example">examples</a>.</p>
 </li>
 <li><p>&nbsp;<code>factories</code>: object</p>
 <p>Register factory methods for custom types. Each property should be the name of the factory and the factory function. See <a href="#registerFactory">registerFactory</a> method.</p>
@@ -289,41 +289,242 @@ sywac<span class="token punctuation">.</span><span class="token function">custom
 </code></pre>
 <p>See <a href="/docs/path-type.html">Path / File / Dir</a> for further details and examples.</p>
 <p><a name="enumeration"></a></p>
-<h2 id="enumeration-flags-opts"><a href="#enumeration-flags-opts" class="headerlink" title=".enumeration(flags, opts)"></a><code>.enumeration(flags, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="enumeration-flags-opts"><a href="#enumeration-flags-opts" class="headerlink" title=".enumeration(flags, opts)"></a><code>.enumeration(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as a string, whose value must be one of an enumerated set of choices.</p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, no default</p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-e, --enum &lt;value&gt;&#39;</code> would allow <code>-e</code> or <code>--enum</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>In addition to <a href="/docs/type-properties.html">common type properties</a>, the object may also define:</p>
+<ul>
+<li><p>&nbsp;<code>choices</code>: array of strings, no default</p>
+<p>The predefined set of values allowed, given as an array.</p>
+<p>Note that a <code>defaultValue</code> IS NOT required to be one of the valid choices.</p>
+</li>
+<li><p>&nbsp;<code>caseInsensitive</code>: boolean, default <code>true</code></p>
+<p>Should case be ignored when matching a parsed value against predefined choices?</p>
+<p>For example, <code>one</code>, <code>One</code>, or <code>ONE</code> would be a valid value for choices <code>[&#39;one&#39;, &#39;two&#39;, &#39;three&#39;]</code>.</p>
+<p>Note that case-insensitive matching DOES NOT mean the value assigned in the resulting <code>argv</code> will be modified. The value given on the command line will remain intact.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">enumeration</span><span class="token punctuation">(</span><span class="token string">'-e, --env &lt;environment>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  desc<span class="token punctuation">:</span> <span class="token string">'The deployment environment to work with'</span><span class="token punctuation">,</span>
+  choices<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'local'</span><span class="token punctuation">,</span> <span class="token string">'dev'</span><span class="token punctuation">,</span> <span class="token string">'qa'</span><span class="token punctuation">,</span> <span class="token string">'stg'</span><span class="token punctuation">,</span> <span class="token string">'prd'</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/enum-type.html">Enum</a> for further details and examples.</p>
 <p><a name="epilogue"></a></p>
-<h2 id="epilogue-epilogue"><a href="#epilogue-epilogue" class="headerlink" title=".epilogue(epilogue)"></a><code>.epilogue(epilogue)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="epilogue-epilogue"><a href="#epilogue-epilogue" class="headerlink" title=".epilogue(epilogue)"></a><code>.epilogue(epilogue)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Define some content to display at the end of generated help text, just before any error messages.</p>
+<p>If called more than once, it will overwrite the previous value.</p>
+<ul>
+<li><p>&nbsp;<code>epilogue</code>: string, no default</p>
+<p>The content to display in help text.</p>
+<p>If no value is given, it will remove any epilogue previously defined (e.g. at a higher command level).</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">epilogue</span><span class="token punctuation">(</span><span class="token string">'Visit http://sywac.io for detailed documentation'</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/help-text.html">Help Text</a> for further details and examples.</p>
 <p><a name="example"></a></p>
-<h2 id="example-example-opts"><a href="#example-example-opts" class="headerlink" title=".example(example, opts)"></a><code>.example(example, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="example-example-opts"><a href="#example-example-opts" class="headerlink" title=".example(example, opts)"></a><code>.example(example, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add an example command to display in generated help text, between the last group of types and the epilogue.</p>
+<p>Call this method multiple times to display multiple examples.</p>
+<p>In output, each example will be grouped according to the <code>group</code> property (default <code>&#39;Examples:&#39;</code>), preceded by a <code>description</code>/<code>desc</code> if given, and prefixed with the <code>examplePrefix</code> from <a href="#outputSettings">output settings</a> (default <code>&#39;$ &#39;</code>).</p>
+<ul>
+<li><p>&nbsp;<code>example</code>: string, no default</p>
+<p>The example command to display in help text.</p>
+<p>Any uses of <code>$0</code> in this string will be replaced with the program name and any necessary commands, similar to the generated usage string.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>The following configuration properties are supported:</p>
+<ul>
+<li><p>&nbsp;<code>description</code> or <code>desc</code>: string, no default</p>
+<p>A description to display above the example command.</p>
+</li>
+<li><p>&nbsp;<code>group</code>: string, default <code>&#39;Examples:&#39;</code></p>
+<p>Define the header this example should be grouped with when displayed.</p>
+</li>
+</ul>
+<p>If no <code>description</code>/<code>desc</code> is given, the example will be placed directly under the last example given with a description. This allows you to apply one description to multiple examples.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac
+  <span class="token punctuation">.</span><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">'$0 add upstream git@github.com:sywac/sywac.git'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    desc<span class="token punctuation">:</span> <span class="token string">'Add a remote named "upstream"'</span><span class="token punctuation">,</span>
+    group<span class="token punctuation">:</span> <span class="token string">'Git-Style Examples:'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">'$0 prune upstream'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    desc<span class="token punctuation">:</span> <span class="token string">'Remove any stale tracking branches from "upstream"'</span><span class="token punctuation">,</span>
+    group<span class="token punctuation">:</span> <span class="token string">'Git-Style Examples:'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">'$0 list'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    desc<span class="token punctuation">:</span> <span class="token string">'The following will all run the default "list" command'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">'$0 ls'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">example</span><span class="token punctuation">(</span><span class="token string">'$0'</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/help-text.html">Help Text</a> for further details and examples.</p>
 <p><a name="exampleOrder"></a></p>
-<h2 id="exampleOrder-orderArray"><a href="#exampleOrder-orderArray" class="headerlink" title=".exampleOrder(orderArray)"></a><code>.exampleOrder(orderArray)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="exampleOrder-orderArray"><a href="#exampleOrder-orderArray" class="headerlink" title=".exampleOrder(orderArray)"></a><code>.exampleOrder(orderArray)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>If there are multiple example groups, you can control the order in which they should be displayed using this method.</p>
+<p>If this method is not used, <a href="#example">examples</a> will be displayed by group according to insertion order.</p>
+<ul>
+<li><p>&nbsp;<code>orderArray</code>: array of strings, default <code>[&#39;Examples:&#39;]</code></p>
+<p>An array that defines the desired order of example groups/headers.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">exampleOrder</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'First Examples:'</span><span class="token punctuation">,</span> <span class="token string">'Second Examples:'</span><span class="token punctuation">,</span> <span class="token string">'Other Examples:'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/help-text.html">Help Text</a> for further details and examples.</p>
 <p><a name="file"></a></p>
-<h2 id="file-flags-opts"><a href="#file-flags-opts" class="headerlink" title=".file(flags, opts)"></a><code>.file(flags, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="file-flags-opts"><a href="#file-flags-opts" class="headerlink" title=".file(flags, opts)"></a><code>.file(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as a file path.</p>
+<p>This is equivalent to calling <code>.path(flags, Object.assign({ dirAllowed: false }, opts))</code></p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, no default</p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-f, --file &lt;file&gt;&#39;</code> would allow <code>-f</code> or <code>--file</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>See <a href="#path">path</a> method for list of supported properties.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">file</span><span class="token punctuation">(</span><span class="token string">'-f, --file &lt;file>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  desc<span class="token punctuation">:</span> <span class="token string">'A file that must exist on the local file system'</span><span class="token punctuation">,</span>
+  mustExist<span class="token punctuation">:</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/path-type.html">Path / File / Dir</a> for further details and examples.</p>
 <p><a name="groupOrder"></a></p>
-<h2 id="groupOrder-orderArray"><a href="#groupOrder-orderArray" class="headerlink" title=".groupOrder(orderArray)"></a><code>.groupOrder(orderArray)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="groupOrder-orderArray"><a href="#groupOrder-orderArray" class="headerlink" title=".groupOrder(orderArray)"></a><code>.groupOrder(orderArray)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Use this method to control the order in which type groups/headers should be displayed in help text.</p>
+<p>This applies to all types: commands, positional arguments, and flagged options.</p>
+<p>Any groups not included in the order will be displayed in insertion order after those included.</p>
+<ul>
+<li><p>&nbsp;<code>orderArray</code>: array of strings, default <code>[&#39;Commands:&#39;, &#39;Arguments:&#39;, &#39;Options:&#39;]</code></p>
+<p>An array that defines the desired order of type groups/headers.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">groupOrder</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+  <span class="token string">'Commands:'</span><span class="token punctuation">,</span>
+  <span class="token string">'Arguments:'</span><span class="token punctuation">,</span>
+  <span class="token string">'Required Options:'</span><span class="token punctuation">,</span>
+  <span class="token string">'Options:'</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/help-text.html">Help Text</a> for further details and examples.</p>
 <p><a name="help"></a></p>
-<h2 id="help-flags-opts"><a href="#help-flags-opts" class="headerlink" title=".help(flags, opts)"></a><code>.help(flags, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="help-flags-opts"><a href="#help-flags-opts" class="headerlink" title=".help(flags, opts)"></a><code>.help(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as a boolean and trigger output of help text.</p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, default <code>&#39;--help&#39;</code></p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-h, --help&#39;</code> would allow <code>-h</code> or <code>--help</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>In addition to <a href="/docs/type-properties.html">common type properties</a>, the object may also define:</p>
+<ul>
+<li><p>&nbsp;<code>description</code> or <code>desc</code>: string, default <code>&#39;Show help&#39;</code></p>
+<p>The description displayed in help text for this option.</p>
+</li>
+<li><p>&nbsp;<code>implicitCommand</code>: boolean, default <code>true</code></p>
+<p>Whether to enable implicit commands for any multi-char flags/aliases defined for this option.</p>
+<p>An implicit command allows help text to be requested via command (e.g. <code>program help</code>) as well as by option/flag (e.g. <code>program whatever --help</code>).</p>
+</li>
+<li><p>&nbsp;<code>includePreface</code>: boolean, default <code>true</code></p>
+<p>Whether the <a href="#preface">preface</a> portion of help text (icon and slogan) should be displayed when help is explicitly requested.</p>
+</li>
+<li><p>&nbsp;<code>includeUsage</code>: boolean, default <code>true</code></p>
+<p>Whether the <a href="#usage">usage</a> portion of help text should be displayed when help is explicitly requested.</p>
+</li>
+<li><p>&nbsp;<code>includeGroups</code>: boolean, default <code>true</code></p>
+<p>Whether the type groups portion of help text should be displayed when help is explicitly requested.</p>
+</li>
+<li><p>&nbsp;<code>includeExamples</code>: boolean, default <code>true</code></p>
+<p>Whether the <a href="#example">examples</a> portion of help text should be displayed when help is explicitly requested.</p>
+</li>
+<li><p>&nbsp;<code>includeEpilogue</code>: boolean, default <code>true</code></p>
+<p>Whether the <a href="#epilogue">epilogue</a> portion of help text should be displayed when help is explicitly requested.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js"><span class="token comment" spellcheck="true">// use all defaults</span>
+sywac<span class="token punctuation">.</span><span class="token function">help</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// specify just flags</span>
+sywac<span class="token punctuation">.</span><span class="token function">help</span><span class="token punctuation">(</span><span class="token string">'-h, --help'</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// specify flags and opts</span>
+sywac<span class="token punctuation">.</span><span class="token function">help</span><span class="token punctuation">(</span><span class="token string">'-h, --help'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  desc<span class="token punctuation">:</span> <span class="token string">'Show this help text'</span><span class="token punctuation">,</span>
+  group<span class="token punctuation">:</span> <span class="token string">'Global Options:'</span><span class="token punctuation">,</span>
+  implicitCommand<span class="token punctuation">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/help-version-type.html">Help and Version</a> for further details and examples.</p>
 <p><a name="number"></a></p>
-<h2 id="number-flags-opts"><a href="#number-flags-opts" class="headerlink" title=".number(flags, opts)"></a><code>.number(flags, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="number-flags-opts"><a href="#number-flags-opts" class="headerlink" title=".number(flags, opts)"></a><code>.number(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as a number.</p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, no default</p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-n, --num &lt;number&gt;&#39;</code> would allow <code>-n</code> or <code>--num</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>See <a href="/docs/type-properties.html">common type properties</a>.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac
+  <span class="token punctuation">.</span><span class="token function">number</span><span class="token punctuation">(</span><span class="token string">'-p, --port &lt;port>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    desc<span class="token punctuation">:</span> <span class="token string">'Which port to the app should listen on'</span><span class="token punctuation">,</span>
+    defaultValue<span class="token punctuation">:</span> <span class="token number">8080</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">number</span><span class="token punctuation">(</span><span class="token string">'--price &lt;amount>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    desc<span class="token punctuation">:</span> <span class="token string">'The price in US currency'</span><span class="token punctuation">,</span>
+    defaultValue<span class="token punctuation">:</span> <span class="token number">0.99</span><span class="token punctuation">,</span>
+    coerce<span class="token punctuation">:</span> val <span class="token operator">=</span><span class="token operator">></span> <span class="token function">Number</span><span class="token punctuation">(</span>val<span class="token punctuation">.</span><span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/number-type.html">Number</a> for further details and examples.</p>
 <p><a name="numberArray"></a></p>
-<h2 id="numberArray-flags-opts"><a href="#numberArray-flags-opts" class="headerlink" title=".numberArray(flags, opts)"></a><code>.numberArray(flags, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="numberArray-flags-opts"><a href="#numberArray-flags-opts" class="headerlink" title=".numberArray(flags, opts)"></a><code>.numberArray(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as an array of numbers.</p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, no default</p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-n, --numbers &lt;values..&gt;&#39;</code> would allow <code>-n</code> or <code>--numbers</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>See <a href="#array">array</a> method for list of supported properties.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">numberArray</span><span class="token punctuation">(</span><span class="token string">'-s, --sum &lt;x,y,z..>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  desc<span class="token punctuation">:</span> <span class="token string">'Specify one or more numbers to add together'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/array-type.html">Array</a> for further details and examples.</p>
 <p><a name="option"></a></p>
 <h2 id="option-flags-opts"><a href="#option-flags-opts" class="headerlink" title=".option(flags, opts)"></a><code>.option(flags, opts)</code></h2><blockquote>
 <p>Needs docs!</p>
@@ -349,17 +550,58 @@ sywac<span class="token punctuation">.</span><span class="token function">custom
 <p>Needs docs!</p>
 </blockquote>
 <p><a name="showHelpByDefault"></a></p>
-<h2 id="showHelpByDefault-boolean"><a href="#showHelpByDefault-boolean" class="headerlink" title=".showHelpByDefault(boolean)"></a><code>.showHelpByDefault(boolean)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="showHelpByDefault-boolean"><a href="#showHelpByDefault-boolean" class="headerlink" title=".showHelpByDefault(boolean)"></a><code>.showHelpByDefault(boolean)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Enable a mode that outputs help text when no arguments or options are given on the command line.</p>
+<p>In a command-driven configuration, this will add a default command (if no default command is explicitly defined) at each subcommand level that outputs the help text. The idea is to show help when no explicit command/subcommand is given on the command line.</p>
+<ul>
+<li><p>&nbsp;<code>boolean</code>: boolean, default <code>true</code></p>
+<p>Whether to enable the mode or not.</p>
+<p>Any value other than <code>false</code> (including no value) will enable the mode.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">showHelpByDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
 <p><a name="string"></a></p>
-<h2 id="string-flags-opts"><a href="#string-flags-opts" class="headerlink" title=".string(flags, opts)"></a><code>.string(flags, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="string-flags-opts"><a href="#string-flags-opts" class="headerlink" title=".string(flags, opts)"></a><code>.string(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as a string.</p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, no default</p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-s, --str &lt;string&gt;&#39;</code> would allow <code>-s</code> or <code>--str</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>See <a href="/docs/type-properties.html">common type properties</a>.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">'-n, --name &lt;name>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  desc<span class="token punctuation">:</span> <span class="token string">'Specify a name'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/string-type.html">String</a> for further details and examples.</p>
 <p><a name="stringArray"></a></p>
-<h2 id="stringArray-flags-opts"><a href="#stringArray-flags-opts" class="headerlink" title=".stringArray(flags, opts)"></a><code>.stringArray(flags, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="stringArray-flags-opts"><a href="#stringArray-flags-opts" class="headerlink" title=".stringArray(flags, opts)"></a><code>.stringArray(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as an array of strings.</p>
+<p>This is a more explicit form of <code>.array(flags, opts)</code>.</p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, no default</p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-a, --array &lt;values..&gt;&#39;</code> would allow <code>-a</code> or <code>--array</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>See <a href="#array">array</a> method for list of supported properties.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">stringArray</span><span class="token punctuation">(</span><span class="token string">'-n, --names &lt;a,b,c..>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  desc<span class="token punctuation">:</span> <span class="token string">'Specify one or more names'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/array-type.html">Array</a> for further details and examples.</p>
 <p><a name="style"></a></p>
 <h2 id="style-hooks"><a href="#style-hooks" class="headerlink" title=".style(hooks)"></a><code>.style(hooks)</code></h2><blockquote>
 <p>Needs docs!</p>
@@ -369,9 +611,46 @@ sywac<span class="token punctuation">.</span><span class="token function">custom
 <p>Needs docs!</p>
 </blockquote>
 <p><a name="version"></a></p>
-<h2 id="version-flags-opts"><a href="#version-flags-opts" class="headerlink" title=".version(flags, opts)"></a><code>.version(flags, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="version-flags-opts"><a href="#version-flags-opts" class="headerlink" title=".version(flags, opts)"></a><code>.version(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as a boolean and trigger output of the program version number.</p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, default <code>&#39;--version&#39;</code></p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-v, --version&#39;</code> would allow <code>-v</code> or <code>--version</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>In addition to <a href="/docs/type-properties.html">common type properties</a>, the object may also define:</p>
+<ul>
+<li><p>&nbsp;<code>description</code> or <code>desc</code>: string, default <code>&#39;Show version number&#39;</code></p>
+<p>The description displayed in help text for this option.</p>
+</li>
+<li><p>&nbsp;<code>implicitCommand</code>: boolean, default <code>true</code></p>
+<p>Whether to enable implicit commands for any multi-char flags/aliases defined for this option.</p>
+<p>An implicit command allows the program version to be requested via command (e.g. <code>program version</code>) as well as by option/flag (e.g. <code>program whatever --version</code>).</p>
+</li>
+<li><p>&nbsp;<code>version</code>: string or function, default will be determined from package.json</p>
+<p>Define this property to forgo package.json lookup and use the given version instead.</p>
+<p>If <code>version</code> is a string, it will be output as the program version.</p>
+<p>If <code>version</code> is a function, it should be synchronous, and its returned value will be output as the program version.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js"><span class="token comment" spellcheck="true">// use all defaults</span>
+sywac<span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// specify just flags</span>
+sywac<span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token string">'-v, --version'</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// specify flags and opts</span>
+sywac<span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token string">'-v, --version'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  desc<span class="token punctuation">:</span> <span class="token string">'Output the program version number'</span><span class="token punctuation">,</span>
+  group<span class="token punctuation">:</span> <span class="token string">'Global Options:'</span><span class="token punctuation">,</span>
+  implicitCommand<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  version<span class="token punctuation">:</span> <span class="token string">'1.2.3'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/help-version-type.html">Help and Version</a> for further details and examples.</p>
 
   <!-- end "page.content" in page.ejs -->
   
