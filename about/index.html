@@ -3,9 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Features - Sywac Docs</title>
   <meta name="viewport" content="width=device-width">
-  <meta property="og:title" content="Features - Sywac Docs">
+  
+  <title>What is Sywac? - About Sywac</title>
+  <meta property="og:title" content="What is Sywac? - About Sywac">
+  
   <meta property="og:type" content="website">
   <meta property="og:url" content="http://sywac.io">
   <meta property="og:description" content="A better CLI framework, made for the ES2015 era.">
@@ -42,86 +44,75 @@
   </div>
 </div>
 
+    
     <section class="content wrap documentationContent">
-      <!-- start "body" in layout.ejs -->
       <div class="inner-content">
   <!-- start "page.content" in page.ejs -->
-  <h1 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h1><h2 id="Single-package-install"><a href="#Single-package-install" class="headerlink" title="Single package install"></a>Single package install</h2><p>Let’s keep things lightweight. No need to install a bunch of dependencies, many of which you probably don’t need or want, just to build a CLI.</p>
-<pre class=" language-bash"><code class="language-bash">$ <span class="token function">npm</span> i --save sywac
-+ sywac@1.0.0
-added 1 package <span class="token keyword">in</span> 1.048s
+  <h1 id="What-is-Sywac"><a href="#What-is-Sywac" class="headerlink" title="What is Sywac?"></a>What is Sywac?</h1><h2 id="So-you-want-a-CLI…-☺"><a href="#So-you-want-a-CLI…-☺" class="headerlink" title="So you want a CLI… ☺"></a><u>S</u>o <u>y</u>ou <u>w</u>ant <u>a</u> <u>C</u>LI… ☺</h2><p><strong>Sywac</strong> is a small framework for building fast and beautiful command line apps in Node.js.</p>
+<p>The central tenets of sywac are:</p>
+<ol>
+<li>Asynchronous <em>parsing</em> and <em>validation</em> of arguments</li>
+<li>Asynchronous <em>execution</em> of app logic</li>
+<li>A <em>pluggable</em>, <em>type-based</em> engine</li>
+<li>A <em>simple</em>, <em>coherent</em> API</li>
+</ol>
+<h2 id="But-aren’t-there-other-libraries-that-do-this-already"><a href="#But-aren’t-there-other-libraries-that-do-this-already" class="headerlink" title="But aren’t there other libraries that do this already?"></a>But aren’t there other libraries that do this already?</h2><p>While there are a handful of good argument parsers out there, like <a href="http://yargs.js.org/" target="_blank" rel="external">yargs</a> and <a href="http://tj.github.io/commander.js/" target="_blank" rel="external">commander</a>, none of them support <strong>asynchronous</strong> parsing and execution, and none of them have the level of flexibility and customization that sywac has.</p>
+<p>The <a href="https://github.com/nexdrew" target="_blank" rel="external">author</a> of sywac is actually a maintainer of yargs, and, after realizing <a href="https://github.com/yargs/yargs/issues/541#issuecomment-256682437" target="_blank" rel="external">some</a> <a href="https://github.com/yargs/yargs/issues/756" target="_blank" rel="external">of</a> <a href="https://github.com/yargs/yargs/issues/564" target="_blank" rel="external">the</a> <a href="https://github.com/yargs/yargs/issues/510" target="_blank" rel="external">major</a> <a href="https://github.com/yargs/yargs/issues/859" target="_blank" rel="external">limitations</a> inherent in the yargs architecture, he opted for a full rewrite, attempting to fix API problems and solve a lot of known issues along the way. Painful? Yes. But also well worth it.</p>
+<p>For a detailed comparison of features, see the <a href="/about/comparison-matrix.html">Comparison Matrix</a>.</p>
+<h2 id="Why-is-asynchronous-parsing-so-important"><a href="#Why-is-asynchronous-parsing-so-important" class="headerlink" title="Why is asynchronous parsing so important?"></a>Why is asynchronous parsing so important?</h2><p>There are several reasons, but the main ones are:</p>
+<ul>
+<li><p>Support for asynchronous input</p>
+<p>  Input for your CLI can come from several places, and some input sources are asynchronous by nature, like reading from stdin, prompting a user for inputs, or reading configuration files from the file system.</p>
+<p>  While <code>sywac@1.0.0</code> does not yet support all of these input sources, its asynchronous framework has the ability to do so.</p>
+</li>
+<li><p>Support for asynchronous validation</p>
+<p>  Sometimes validation of inputs relies on external resources, like the file system, a database, or an HTTP endpoint, which just works better if it can be done asynchronously.</p>
+<p>  With sywac, you can do this without muddying up your app logic <em>after</em> parsing and validation has occurred.</p>
+</li>
+<li><p>Better app control flow</p>
+<p>  If your CLI app relies on execution of commands, how do you know if a command was run once the CLI library returns the parsed results? Do you have to keep track of custom variables or context between modules? How do you know if the command completed successfully, particularly if it’s asynchronous? What if you need to wait for it to complete before handling the results?</p>
+<p>  With sywac, you don’t have to worry about this. It does the right thing and waits for your command to resolve before reporting back the results of execution.</p>
+</li>
+<li><p>Support for <code>async</code>/<code>await</code></p>
+<p>  <a href="http://node.green/#ES2017-features-async-functions-await" target="_blank" rel="external">As of Node.js 7.10.0</a>, <code>async</code>/<code>await</code> is natively available to your app logic.</p>
+<p>  Does your CLI library support it?</p>
+</li>
+<li><p>This is Node.js</p>
+<p>  Node.js is really, really good at asynchronous tasks and managing concurrency, and apps written to leverage this capability are highly performant.</p>
+<p>  Why should our CLIs be any different?</p>
+</li>
+</ul>
+<p>The wonderful thing about using an asynchronous framework is that the “cost” of writing non-blocking code has been paid for you. Even if your app logic doesn’t need to be asynchronous, it still fits with sywac since the framework wraps any <code>return</code> in a <code>Promise</code>, and you don’t sacrifice anything.</p>
+<h2 id="What-do-you-mean-by-flexibility-and-customization"><a href="#What-do-you-mean-by-flexibility-and-customization" class="headerlink" title="What do you mean by flexibility and customization?"></a>What do you mean by flexibility and customization?</h2><p>Have you ever encountered a small problem with your CLI library, one that you could easily fix if it only allowed you to plug in your own bit of code? Sywac allows you to do this.</p>
+<p>Maybe you like your CLI library but there are parts of it you just can’t customize or override. In sywac, almost every component built into the framework can be swapped out.</p>
+<p>How about styling or customizing the help text without having to write the whole thing yourself? Sywac gives you the hooks to do this too.</p>
+<h2 id="What-do-you-mean-by-a-type-based-engine"><a href="#What-do-you-mean-by-a-type-based-engine" class="headerlink" title="What do you mean by a type-based engine?"></a>What do you mean by a type-based engine?</h2><p>When it comes to parsing CLI arguments (or a command string for a chatbot), the ability to correctly interpret each argument is highly dependent on the <em>type</em> of value the argument represents. Here’s an example:</p>
+<pre class=" language-bash"><code class="language-bash">$ program push -f artifact.tgz
 </code></pre>
-<p>A major goal of sywac has always been to deliver a robust CLI framework as a single standalone dependency.</p>
-<p>Does this go against the Unix philosophy of <a href="https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well" target="_blank" rel="external">“do one thing and do it well”</a>? Possibly. All I really know is that, as a CLI author myself, I started avoiding the use of certain packages because I didn’t want users of my CLI (and the systems on which they were installed) to have to download dozens of packages just to use my one simple program. You may disagree, and that’s fine. Everyone can choose based on what’s important to them.</p>
-<h2 id="Asynchronous-parsing-validation-and-command-execution"><a href="#Asynchronous-parsing-validation-and-command-execution" class="headerlink" title="Asynchronous parsing, validation, and command execution"></a>Asynchronous parsing, validation, and command execution</h2><p>Most CLI libraries use synchronous parsing - which makes sense when parsing logic is centralized and doesn’t need to account for asynchronous sources of input - but this is exactly what makes sywac different. It uses an engine based on native <code>Promise</code> support to provide a highly performant, parsing-via-delegation system that supports asynchronous inputs, validation of those inputs, and well-defined control flow of application logic.</p>
-<p>For details on this part of the API, see <a href="/docs/async-parsing.html">Asynchronous Parsing, Validation, Execution</a>.</p>
-<h2 id="Type-based-argument-parsing"><a href="#Type-based-argument-parsing" class="headerlink" title="Type-based argument parsing"></a>Type-based argument parsing</h2><p>Instead of telling a centralized parser about what types to expect, sywac delegates parsing to separate instances of each defined type so there is no centralized parser. This allows for a pluggable framework where it’s easy to customize the parsing logic in a modular way, if you need to. It also means configuration of each type is encapsulated per instance for a clear separation of concerns.</p>
-<p>To read more aboue how this works, see <a href="/docs/api-and-types.html">API Instance and Types</a>.</p>
-<h2 id="Plug-in-your-own-types-or-override-extend-the-built-in-ones"><a href="#Plug-in-your-own-types-or-override-extend-the-built-in-ones" class="headerlink" title="Plug in your own types or override/extend the built-in ones"></a>Plug in your own types or override/extend the built-in ones</h2><p>Sywac comes with a set of basic argument/option types, exposed via individual classes. If there’s a special type that sywac doesn’t have built-in support for, you can plug your own in (or perhaps plug in a custom type that someone else wrote). You can even override the built-in types if they don’t do exactly what you want them to do.</p>
-<p>For examples of custom types and how to plug them in, see <a href="/docs/custom-types.html">Custom Types</a>.</p>
-<h2 id="Support-for-simple-CLIs-or-complex-nested-command-trees"><a href="#Support-for-simple-CLIs-or-complex-nested-command-trees" class="headerlink" title="Support for simple CLIs or complex nested command trees"></a>Support for simple CLIs or complex nested command trees</h2><p>Sywac supports the simplest of CLIs, perhaps accepting only one or two arguments, but it also has the power to support advanced command-driven CLIs where each command can have its own tree of arbitrary nested commands and arguments.</p>
-<p>For simpler use-cases, see the <a href="/docs/">Quick Start Guide</a>.</p>
-<p>For details on command support, see <a href="/docs/command-type.html">Commands</a>.</p>
-<h2 id="First-class-support-for-positional-arguments-with-or-without-commands"><a href="#First-class-support-for-positional-arguments-with-or-without-commands" class="headerlink" title="First-class support for positional arguments, with or without commands"></a>First-class support for positional arguments, with or without commands</h2><p>Positional arguments make for great CLIs, since you can give a program its main arguments without requiring any fancy flags or argument prefixes. Sadly, other popular CLI libraries only support positional arguments in certain use-cases or don’t document them in generated help content or don’t support parsing them as specific datatypes. In sywac, positional arguments are first-class citizens, allowing you to build intuitive CLIs with or without commands.</p>
-<p>For more info on positional argument support, see <a href="/docs/positional-type.html">Positionals</a>.</p>
-<h2 id="Flexible-auto-generated-help-content"><a href="#Flexible-auto-generated-help-content" class="headerlink" title="Flexible auto-generated help content"></a>Flexible auto-generated help content</h2><p>Sywac always attempts to Do The Right Thing™, and makes doing the right thing easy. So when it comes to help text for your CLI, you provide the “flags” and descriptions of your commands/arguments/options and sywac does the rest - building a clean, informative, and consistent help text body by default.</p>
-<p>However, there are times when the default generated content just doesn’t cut it. For those times, sywac allows you to customize each part of the generated content or even override the whole thing with your own help buffer object or class.</p>
-<p>For details on the auto-generated help text and how to customize it, see <a href="/docs/help-text.html">Help Text</a>.</p>
-<h2 id="Support-for-ANSI-styles-colors"><a href="#Support-for-ANSI-styles-colors" class="headerlink" title="Support for ANSI styles/colors"></a>Support for ANSI styles/colors</h2><p>Speaking of help text, have you ever wanted to make your CLI stand out and look professional using colors and styles in your help content? Other CLI libraries either don’t allow you to use ANSI styles for certain parts of the help text (e.g. in option flags) or require you to statically write the whole help text yourself to support colors.</p>
-<p>Sywac was built with styling in mind and strives to support ANSI escape codes in every part of the generated help text. And the best part is you can keep your styling logic separate from your type definitions using <em>style hooks</em> for a clear separation of concerns.</p>
-<p>For more info on style hooks, see <a href="/docs/style-hooks.html">Style Hooks</a> or keep reading below.</p>
-<h2 id="Define-styles-colors-inline-or-decorate-content-with-style-hooks"><a href="#Define-styles-colors-inline-or-decorate-content-with-style-hooks" class="headerlink" title="Define styles/colors inline or decorate content with style hooks"></a>Define styles/colors inline or decorate content with style hooks</h2><p>When it comes to supporting ANSI styles and colors, sywac allows you to define your command/argument/option “flags” and descriptions with ANSI escape codes inline:</p>
-<pre class=" language-js"><code class="language-js"><span class="token keyword">const</span> chalk <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'chalk'</span><span class="token punctuation">)</span>
-<span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac'</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span>chalk<span class="token template-string"><span class="token string">`{green -s}, {green --str} {yellow &lt;string>}`</span></span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
-    desc<span class="token punctuation">:</span> chalk<span class="token punctuation">.</span><span class="token function">white</span><span class="token punctuation">(</span><span class="token string">'A string option'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    hints<span class="token punctuation">:</span> chalk<span class="token punctuation">.</span><span class="token function">dim</span><span class="token punctuation">(</span><span class="token string">'[string]'</span><span class="token punctuation">)</span>
-  <span class="token punctuation">}</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">help</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">showHelpByDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">parseAndExit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>argv <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Your string is: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>argv<span class="token punctuation">.</span>str<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-</code></pre>
-<p>Or, for more control and a clearer separation of concerns, add styles and colors using <em>style hooks</em>:</p>
-<pre class=" language-js"><code class="language-js"><span class="token keyword">const</span> chalk <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'chalk'</span><span class="token punctuation">)</span>
-<span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac'</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">'-s, --str &lt;string>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> desc<span class="token punctuation">:</span> <span class="token string">'A string option'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">help</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">showHelpByDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">style</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-    flags<span class="token punctuation">:</span> s <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">green</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    desc<span class="token punctuation">:</span> s <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">white</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    hints<span class="token punctuation">:</span> s <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">dim</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span>
-  <span class="token punctuation">}</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">parseAndExit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>argv <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Your string is: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>argv<span class="token punctuation">.</span>str<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-</code></pre>
-<p>Sywac even allows you to dynamically change the help text style/color for arguments/options that are invalid when validation fails. This is standard practice in web apps with HTML forms, why not apply this practice to our CLIs too?</p>
-<p>For more details on this feature, see <a href="/docs/style-hooks.html">Style Hooks</a>.</p>
-<h2 id="Coherent-API"><a href="#Coherent-API" class="headerlink" title="Coherent API"></a>Coherent API</h2><p>In the sywac API, the way you define/configure one argument/option works the same for all arguments/options, regardless of the type or method, and property names are reused so they are common across multiple API methods. This applies to basic option types like <a href="/docs/boolean-type.html">boolean</a>/<a href="/docs/string-type.html">string</a>, specialty option types likes <a href="/docs/help-version-type.html">help/version</a>, and advanced types like <a href="/docs/command-type.html">command</a>. And you only need to specify each thing once - no more repeating keys or aliases across multiple methods to configure one type.</p>
-<p>For details on common type properties, see <a href="/docs/type-properties.html">Common Type Properties</a>.</p>
-<h2 id="Parse-strings-as-easily-as-process-argv"><a href="#Parse-strings-as-easily-as-process-argv" class="headerlink" title="Parse strings as easily as process.argv"></a>Parse strings as easily as <code>process.argv</code></h2><p>From inception, sywac was designed to support parsing strings (like chatbot messages) as well as arrays (like <code>process.argv</code>), and its API doesn’t co-mingle configuration state with parsing/execution/result state. Each message or set of arguments that need to be parsed are treated as a separate, individual request, much like an HTTP framework. This also makes testing with sywac a breeze.</p>
-<p>See <a href="/docs/async-parsing.html">Asynchronous Parsing, Validation, Execution</a> for details on parsing and <a href="/docs/context.html">Context</a> for details on state. Or keep reading to learn why sywac works just as well for server-side apps as for CLI apps.</p>
-<h2 id="Supports-concurrent-parsing-safe-for-chatbots-or-other-server-side-apps"><a href="#Supports-concurrent-parsing-safe-for-chatbots-or-other-server-side-apps" class="headerlink" title="Supports concurrent parsing, safe for chatbots or other server-side apps"></a>Supports concurrent parsing, safe for chatbots or other server-side apps</h2><p>Although sywac was primarily built for making robust CLIs (even the name “sywac” is an acronym for “so you want a CLI”), a lot of effort in sywac’s implementation went towards support for parsing different messages/arguments <em>at the same time</em>, using the same configuration.</p>
-<p>This is why <a href="/docs/sync-config.html">synchronous configuration</a> state is encapsulated within “long-lived” type instances but <a href="/docs/async-parsing.html">asynchronous parsing</a> state is encapsulated within a “short-lived” <a href="/docs/context.html">context</a> instance, much like an HTTP request. Also, for command-driven parsing, the <a href="/docs/command-run.html">asynchronous run handler</a> of a command is meant to be functional, such that any execution state it needs is passed as a function argument, much like a controller in an MVC framework.</p>
-<p>These details, combined with its asynchronous parsing engine, make sywac a great solution for server-side apps that need message parsing, like a chatbot, supporting concurrent parsing/message-handling in a highly performant system.</p>
+<p>Is <code>push</code> a command or a positional argument? Is <code>artifact.tgz</code> supposed to be the value of <code>-f</code>? If it is, is the value supposed to represent a file that does or does not exist? What if <code>-f</code> represents a boolean and <code>artifact.tgz</code> is a positional argument?</p>
+<p>The only way to correctly interpret the arguments is based on the expected <em>types</em> defined in <code>program</code>.</p>
+<p>Now most command line parsers support type definitions, typically by configuring a parser and letting the synchronous parser do the work.</p>
+<p>But in sywac, each expected argument is represented by an instance of a special Type class, and parsing is delegated to these type instances in an asynchronous, highly concurrent fashion. Now, instead of a single parser having all the power, each type instance is allowed to parse its own arguments, making a system where it’s easy to plug in your own types and change how arguments are parsed and interpreted.</p>
+<h2 id="Ok-what’s-next"><a href="#Ok-what’s-next" class="headerlink" title="Ok, what’s next?"></a>Ok, what’s next?</h2><p>Check out the <a href="/docs">Quick Start Guide</a> to get started right away, or click Next to continue reading about the project.</p>
 
   <!-- end "page.content" in page.ejs -->
   
   <div class="docs-prevnext">
     
-    <a class="docs-prev" href="/docs/command-modules.html">← Previous</a>
     
-    
-    <a class="docs-next" href="/about/comparison-matrix.html">Next →</a>
+    <a class="docs-next" href="/about/features.html">Next →</a>
     
   </div>
   
 </div>
 
-      <!-- end "body" in layout.ejs -->
       
       <div class="nav-docs">
   <div class="nav-docs-section">
     <h3>About</h3>
     <ul>
-      <li><a style="margin-left:0;" class="active" href="/about">Features</a></li>
+      <li><a style="margin-left:0;" class="active" href="/about">What is Sywac?</a></li>
+      <li><a style="margin-left:0;" class="" href="/about/features.html">Features</a></li>
       <li><a style="margin-left:0;" class="" href="/about/comparison-matrix.html">Comparison Matrix</a></li>
       <li><a style="margin-left:0;" class="" href="/about/roadmap.html">Roadmap</a></li>
     </ul>
@@ -130,8 +121,11 @@ added 1 package <span class="token keyword">in</span> 1.048s
 
       
     </section>
+    
     <footer>
+  
   <span>See an error? <a href="https://github.com/sywac/sywac-website/tree/master/source/about/index.md">Contribute to this docs site!</a></span>
+  
   <span>Made with ♡ by <a href="https://github.com/nexdrew">nexdrew</a></span>
 </footer>
 
