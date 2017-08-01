@@ -528,29 +528,265 @@ sywac<span class="token punctuation">.</span><span class="token function">help</
 </code></pre>
 <p>See <a href="/docs/array-type.html">Array</a> for further details and examples.</p>
 <p><a name="option"></a></p>
-<h2 id="option-flags-opts"><a href="#option-flags-opts" class="headerlink" title=".option(flags, opts)"></a><code>.option(flags, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="option-flags-opts"><a href="#option-flags-opts" class="headerlink" title=".option(flags, opts)"></a><code>.option(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that specifies its <code>type</code> in the <code>opts</code> configuration.</p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, no default</p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-o, --opt &lt;value&gt;&#39;</code> would allow <code>-o</code> or <code>--opt</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>In addition to <a href="/docs/type-properties.html">common type properties</a>, the object should also define:</p>
+<ul>
+<li><p>&nbsp;<code>type</code>: string, no default</p>
+<p>Specifies the factory name of the type to be added. This may be one of the following built-in types or any name that has been registered with a factory via the <a href="#registerFactory">registerFactory</a> method: <code>&#39;boolean&#39;</code>, <code>&#39;string&#39;</code>, <code>&#39;number&#39;</code>, <code>&#39;path&#39;</code>, <code>&#39;file&#39;</code>, <code>&#39;dir&#39;</code>, <code>&#39;enum&#39;</code>, <code>&#39;array&#39;</code></p>
+<p>A value prefixed with <code>&#39;array:&#39;</code> will add an array of the specified type.</p>
+<p>In 1.0.0, if no <code>type</code> is specified, no option will be added.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example using built-in types:</p>
+<pre class=" language-js"><code class="language-js">sywac
+  <span class="token punctuation">.</span><span class="token function">option</span><span class="token punctuation">(</span><span class="token string">'-s, --str &lt;string>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">'string'</span><span class="token punctuation">,</span>
+    desc<span class="token punctuation">:</span> <span class="token string">'A string option'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">option</span><span class="token punctuation">(</span><span class="token string">'-i, --ingredients &lt;a,b,c..>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">'array:enum'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// prefix "array:" to make an array of that type</span>
+    choices<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'pb'</span><span class="token punctuation">,</span> <span class="token string">'jelly'</span><span class="token punctuation">,</span> <span class="token string">'banana'</span><span class="token punctuation">,</span> <span class="token string">'apple'</span><span class="token punctuation">,</span> <span class="token string">'pickle'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    desc<span class="token punctuation">:</span> <span class="token string">'What would you like on your sandwich?'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Example using custom type:</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">const</span> Type <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac/types/type'</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">Range</span> <span class="token keyword">extends</span> <span class="token class-name">Type</span> <span class="token punctuation">{</span>
+  <span class="token keyword">get</span> datatype <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">'range'</span>
+  <span class="token punctuation">}</span>
+  setValue <span class="token punctuation">(</span>context<span class="token punctuation">,</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> value <span class="token operator">!==</span> <span class="token string">'string'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> context<span class="token punctuation">.</span><span class="token function">assignValue</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>id<span class="token punctuation">,</span> <span class="token punctuation">{</span>start<span class="token punctuation">:</span> <span class="token number">NaN</span><span class="token punctuation">,</span> finish<span class="token punctuation">:</span> <span class="token number">NaN</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">const</span> vals <span class="token operator">=</span> value<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token regex">/(\.)\1{1,}/</span><span class="token punctuation">)</span>
+    <span class="token keyword">const</span> numbers <span class="token operator">=</span> vals<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>v <span class="token operator">=</span><span class="token operator">></span> v <span class="token operator">&amp;&amp;</span> v <span class="token operator">!==</span> <span class="token string">'.'</span><span class="token punctuation">)</span>
+    context<span class="token punctuation">.</span><span class="token function">assignValue</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>id<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      start<span class="token punctuation">:</span> <span class="token function">Number</span><span class="token punctuation">(</span>numbers<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      finish<span class="token punctuation">:</span> <span class="token function">Number</span><span class="token punctuation">(</span>numbers<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  validateValue <span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> value <span class="token operator">&amp;&amp;</span>
+      <span class="token keyword">typeof</span> value<span class="token punctuation">.</span>start <span class="token operator">===</span> <span class="token string">'number'</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token function">isNaN</span><span class="token punctuation">(</span>value<span class="token punctuation">.</span>start<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+      <span class="token keyword">typeof</span> value<span class="token punctuation">.</span>finish <span class="token operator">===</span> <span class="token string">'number'</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token function">isNaN</span><span class="token punctuation">(</span>value<span class="token punctuation">.</span>finish<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  buildInvalidMessage <span class="token punctuation">(</span>context<span class="token punctuation">,</span> msgAndArgs<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">buildInvalidMessage</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> msgAndArgs<span class="token punctuation">)</span>
+    <span class="token keyword">const</span> value <span class="token operator">=</span> msgAndArgs<span class="token punctuation">.</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    msgAndArgs<span class="token punctuation">.</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token template-string"><span class="token string">`{start: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>value<span class="token punctuation">.</span>start<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">, finish: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>value<span class="token punctuation">.</span>finish<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">}`</span></span>
+    msgAndArgs<span class="token punctuation">.</span>msg <span class="token operator">+</span><span class="token operator">=</span> <span class="token string">' Please specify two numbers.'</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+sywac
+  <span class="token punctuation">.</span><span class="token function">registerFactory</span><span class="token punctuation">(</span><span class="token string">'range'</span><span class="token punctuation">,</span> opts <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">Range</span><span class="token punctuation">(</span>opts<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">option</span><span class="token punctuation">(</span><span class="token string">'-r, --range &lt;num..num>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">'range'</span><span class="token punctuation">,</span>
+    desc<span class="token punctuation">:</span> <span class="token string">'Two numbers separated by two or more dots'</span><span class="token punctuation">,</span>
+    defaultValue<span class="token punctuation">:</span> <span class="token string">'1..10'</span><span class="token punctuation">,</span>
+    strict<span class="token punctuation">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/info-types.html">General Type Info</a> for more info on types.</p>
 <p><a name="outputSettings"></a></p>
-<h2 id="outputSettings-settings"><a href="#outputSettings-settings" class="headerlink" title=".outputSettings(settings)"></a><code>.outputSettings(settings)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="outputSettings-settings"><a href="#outputSettings-settings" class="headerlink" title=".outputSettings(settings)"></a><code>.outputSettings(settings)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Configure output settings for generated help text.</p>
+<ul>
+<li><p>&nbsp;<code>settings</code>: object, no default</p>
+<p>An object representing output configuration, supporting the following properties:</p>
+<ul>
+<li><p>&nbsp;<code>maxWidth</code>: number, default <code>Math.min(100, process.stdout.columns)</code></p>
+<p>Define the maximum number of character/code-point columns allowed for generated help text.</p>
+</li>
+<li><p>&nbsp;<code>showHelpOnError</code>: boolean, default <code>true</code></p>
+<p>Should generated help text be output when a validation error occurs?</p>
+<p>If this is disabled, only the error messages will be output on errors.</p>
+</li>
+<li><p>&nbsp;<code>examplePrefix</code>: string, default <code>&#39;$ &#39;</code></p>
+<p>The prefix used before each <a href="#example">example</a> command in help text.</p>
+</li>
+<li><p>&nbsp;<code>lineSep</code>: string, default <code>&#39;\n&#39;</code></p>
+<p>A string used to separate lines in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>sectionSep</code>: string, default <code>lineSep + lineSep</code></p>
+<p>A string used to separate sections in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>pad</code>: string, default <code>&#39; &#39;</code></p>
+<p>A string that is multiplied to define padding between aligned columns in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>indent</code>: string, default <code>pad + pad</code></p>
+<p>A string used to define minimum indentation for each aligned column in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>split</code>: RegExp, default <code>/\s/g</code></p>
+<p>Used to define word boundaries when dividing a string (like a description) wider than <code>maxWidth</code> into multiple chunks/lines.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">outputSettings</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  maxWidth<span class="token punctuation">:</span> <span class="token number">75</span><span class="token punctuation">,</span>          <span class="token comment" spellcheck="true">// limit help text to 75 columns</span>
+  showHelpOnError<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token comment" spellcheck="true">// do not show help text on validations errors</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/help-text.html">Help Text</a> for further details and examples.</p>
 <p><a name="path"></a></p>
-<h2 id="path-flags-opts"><a href="#path-flags-opts" class="headerlink" title=".path(flags, opts)"></a><code>.path(flags, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="path-flags-opts"><a href="#path-flags-opts" class="headerlink" title=".path(flags, opts)"></a><code>.path(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add a flagged option that should be parsed as a file or directory path.</p>
+<ul>
+<li><p>&nbsp;<code>flags</code>: string, no default</p>
+<p>Defines the flags used in help text and aliases to expect when parsing.</p>
+<p>For example, <code>&#39;-p, --path &lt;path&gt;&#39;</code> would allow <code>-p</code> or <code>--path</code> to be given when parsing.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>In addition to <a href="/docs/type-properties.html">common type properties</a>, the object may also define:</p>
+<ul>
+<li><p>&nbsp;<code>mustExist</code>: boolean, no default</p>
+<p>Enables validation that requires the specified path to either exist or not exist on the local file system.</p>
+<p>Use a value of <code>true</code> to require the path to exist locally.</p>
+<p>Use a value of <code>false</code> to require the path to NOT exist locally.</p>
+<p>If <code>mustExist</code> is undefined, the path will not be validated, to support cases where the path does not apply to the local file system (i.e. could be a remote path).</p>
+</li>
+<li><p>&nbsp;<code>dirAllowed</code>: boolean, default <code>true</code></p>
+<p>Should this path allow directories?</p>
+<p>Note that if <code>mustExist</code> is undefined, this property is only suggestive, as commentary in help text.</p>
+</li>
+<li><p>&nbsp;<code>fileAllowed</code>: boolean, default <code>true</code></p>
+<p>Should this path allow files?</p>
+<p>Note that if <code>mustExist</code> is undefined, this property is only suggestive, as commentary in help text.</p>
+</li>
+<li><p>&nbsp;<code>normalize</code>: boolean, default <code>false</code></p>
+<p>Transform the parsed value into a normalized path string using <a href="https://nodejs.org/api/path.html#path_path_normalize_path" target="_blank" rel="external">path.normalize(path)</a>.</p>
+</li>
+<li><p>&nbsp;<code>asObject</code>: boolean, default <code>false</code></p>
+<p>Transform the parsed value into an object using <a href="https://nodejs.org/api/path.html#path_path_parse_path" target="_blank" rel="external">path.parse(path)</a>.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">'-p, --path &lt;path>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  desc<span class="token punctuation">:</span> <span class="token string">'A normalized path'</span><span class="token punctuation">,</span>
+  normalize<span class="token punctuation">:</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/path-type.html">Path / File / Dir</a> for further details and examples.</p>
 <p><a name="positional"></a></p>
-<h2 id="positional-dsl-opts"><a href="#positional-dsl-opts" class="headerlink" title=".positional(dsl, opts)"></a><code>.positional(dsl, opts)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="positional-dsl-opts"><a href="#positional-dsl-opts" class="headerlink" title=".positional(dsl, opts)"></a><code>.positional(dsl, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Add one or more positional arguments to your program without using <a href="#command">commands</a>.</p>
+<ul>
+<li><p>&nbsp;<code>dsl</code>: string, no default</p>
+<p>A string defining each positional argument, along with any flags that might be used to specify the argument as well.</p>
+<p>Each argument may consist of the following:</p>
+<ol>
+<li>flags, surrounded by <code>[</code> and <code>]</code> and followed by a space, e.g. <code>[--key]</code> or <code>[-k|--key]</code></li>
+<li>opening delimiter, e.g. use <code>[</code> if the argument is optional or <code>&lt;</code> if the argument is required</li>
+<li>aliases and implicit type, separated by <code>|</code>, e.g. <code>name</code> or <code>name|email</code> or <code>string</code> or <code>file</code></li>
+<li>explicit type, preceded by <code>:</code>, e.g. <code>:number</code> or <code>:enum</code> or <code>:path</code></li>
+<li>variadic designation via <code>..</code>, which wraps the type in an array and accepts multiple values</li>
+<li>default value, preceded by <code>=</code>, e.g. <code>=package.json</code> or <code>=8080</code></li>
+<li>closing delimiter (if opening delimiter was defined), e.g. use <code>]</code> or <code>&gt;</code></li>
+</ol>
+<p>The only thing required for each argument is its alias(es).</p>
+<p>If no flags are given, the argument will only be defined by position during parsing.</p>
+<p>If no opening or closing delimiters are given, the argument is assumed to be required.</p>
+<p>If no explicit type is given, the type will be defined implicitly by the first alias (if the alias matches the name of any registered factories) or will default to a string.</p>
+<p>Note that the dsl string will be used in generated usage and help text by default. Therefore you can include content in the dsl string that is purely commentary and should not be interpreted as explicit positional arguments. To do this, just specify the content to ignore via the <code>ignore</code> property in <code>opts</code>.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object, no default</p>
+<p>The following configuration properties are supported:</p>
+<ul>
+<li><p>&nbsp;<code>ignore</code>: string or array of strings, no default</p>
+<p>Words to ignore in the dsl string.</p>
+<p>For example, if your dsl string was <code>&#39;&lt;name&gt; [options] [others..]&#39;</code> and wanted <code>[options]</code> and <code>[others..]</code> to be used only for help text, you could specify <code>ignore: [&#39;[options]&#39;, &#39;[others..]&#39;]</code> and then <code>&lt;name&gt;</code> would be the only positional arg added.</p>
+</li>
+<li><p>&nbsp;<code>params</code>: array of objects, default determined by dsl</p>
+<p>Each object in the array will be treated as <code>opts</code> for the respective type in the dsl string.</p>
+<p>If you specify <code>type</code> for the object in <code>params</code>, it will override the implicit/explicit type determined from the dsl string.</p>
+<p>Refer to <a href="/docs/type-properties.html">common type properties</a> or the <a href="#option">option</a> method or the method for the type to see all supported properties.</p>
+</li>
+<li><p>&nbsp;<code>paramsDescription</code> or <code>paramsDesc</code>: string or array of strings, no default</p>
+<p>Use this to add a description for the positional args in the dsl string without having to define <code>params</code>.</p>
+<p>If you provide a string, it will be used for the first positional arg in the dsl string.</p>
+<p>If you provide an array, each string will be used for the respective positional arg in the dsl string.</p>
+</li>
+<li><p>&nbsp;<code>paramsGroup</code>: string, default <code>&#39;Arguments:&#39;</code></p>
+<p>Use this to define the help text group header for all positional args in the dsl string, instead of defining the <code>group</code> in every object of <code>params</code>.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js"><span class="token comment" spellcheck="true">// this defines two positional args:</span>
+<span class="token comment" spellcheck="true">// 1. service: string, required, positional only, no default</span>
+<span class="token comment" spellcheck="true">// 2. host or H: string, optional, positional or flag, default 'localhost'</span>
+sywac<span class="token punctuation">.</span><span class="token function">positional</span><span class="token punctuation">(</span><span class="token string">'&lt;service> [-H|--host] [host=localhost]'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  paramsDesc<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token string">'The service to deploy'</span><span class="token punctuation">,</span>
+    <span class="token string">'The target deployment host'</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/positional-type.html">Positionals</a> for further details and examples.</p>
 <p><a name="preface"></a></p>
-<h2 id="preface-icon-slogan"><a href="#preface-icon-slogan" class="headerlink" title=".preface(icon, slogan)"></a><code>.preface(icon, slogan)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="preface-logo-slogan"><a href="#preface-logo-slogan" class="headerlink" title=".preface(logo, slogan)"></a><code>.preface(logo, slogan)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Define a logo and/or slogan to display at the beginning of generated help text.</p>
+<p>If called more than once, it will overwrite any previous value(s).</p>
+<ul>
+<li><p>&nbsp;<code>logo</code>: string, no default</p>
+<p>A string representing the logo for your CLI/app to display in generated help text.</p>
+<p>Try combining a <a href="https://github.com/patorjk/figlet.js" target="_blank" rel="external">figlet</a> ASCII font with <a href="https://github.com/chalk/chalk" target="_blank" rel="external">chalk</a> colors for a quick and pretty logo.</p>
+</li>
+<li><p>&nbsp;<code>slogan</code>: string, no default</p>
+<p>A string representing a slogan or description for your CLI/app to display in generated help text.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">const</span> figlet <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'figlet'</span><span class="token punctuation">)</span>
+sywac<span class="token punctuation">.</span><span class="token function">preface</span><span class="token punctuation">(</span>
+  figlet<span class="token punctuation">.</span><span class="token function">textSync</span><span class="token punctuation">(</span><span class="token string">'npm-check'</span><span class="token punctuation">,</span> <span class="token string">'Stop'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token string">'Check for outdated, incorrect, and unused dependencies.'</span>
+<span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/help-text.html">Help Text</a> for further details and examples.</p>
 <p><a name="registerFactory"></a></p>
-<h2 id="registerFactory-name-factory"><a href="#registerFactory-name-factory" class="headerlink" title=".registerFactory(name, factory)"></a><code>.registerFactory(name, factory)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="registerFactory-name-factory"><a href="#registerFactory-name-factory" class="headerlink" title=".registerFactory(name, factory)"></a><code>.registerFactory(name, factory)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Register a factory method/function that should be used to create type instances for the given name.</p>
+<p>Use this to plug in your own types into the framework, or use it to override the factories for built-in types.</p>
+<p>Note that this should be called <em>before</em> other methods that use the factory.</p>
+<ul>
+<li><p>&nbsp;<code>name</code>: string, no default</p>
+<p>The name of the type referenced by <a href="#option">option</a>, <a href="#positional">positional</a>, or internally by any type-named method.</p>
+<p>For example, the factory for <code>&#39;boolean&#39;</code> is used by the <a href="#boolean">boolean</a> method.</p>
+</li>
+<li><p>&nbsp;<code>factory</code>: function, no default</p>
+<p>The function that returns a new type instance for each invocation.</p>
+<p>It should accept one argument representing the <code>opts</code> configuration object for the type.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac
+  <span class="token comment" spellcheck="true">// add a new type</span>
+  <span class="token punctuation">.</span><span class="token function">registerFactory</span><span class="token punctuation">(</span><span class="token string">'port'</span><span class="token punctuation">,</span> opts <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">TypePort</span><span class="token punctuation">(</span>opts<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token comment" spellcheck="true">// override an existing one</span>
+  <span class="token punctuation">.</span><span class="token function">registerFactory</span><span class="token punctuation">(</span><span class="token string">'boolean'</span><span class="token punctuation">,</span> opts <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">CustomBoolean</span><span class="token punctuation">(</span>opts<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/custom-types.html">Custom Types</a> for further details and examples.</p>
 <p><a name="showHelpByDefault"></a></p>
 <h2 id="showHelpByDefault-boolean"><a href="#showHelpByDefault-boolean" class="headerlink" title=".showHelpByDefault(boolean)"></a><code>.showHelpByDefault(boolean)</code></h2><p><sup>Since 1.0.0</sup></p>
 <p>Enable a mode that outputs help text when no arguments or options are given on the command line.</p>
@@ -605,13 +841,125 @@ sywac<span class="token punctuation">.</span><span class="token function">help</
 </code></pre>
 <p>See <a href="/docs/array-type.html">Array</a> for further details and examples.</p>
 <p><a name="style"></a></p>
-<h2 id="style-hooks"><a href="#style-hooks" class="headerlink" title=".style(hooks)"></a><code>.style(hooks)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="style-hooks"><a href="#style-hooks" class="headerlink" title=".style(hooks)"></a><code>.style(hooks)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Define functions to style respective portions of generated help text.</p>
+<ul>
+<li><p>&nbsp;<code>hooks</code>: object, no default</p>
+<p>The following properties are supported:</p>
+<ul>
+<li><p>&nbsp;<code>usagePrefix</code>: function, no default</p>
+<p>Style the prefix part of generated usage, i.e. <code>&#39;Usage: program&#39;</code></p>
+</li>
+<li><p>&nbsp;<code>usagePositionals</code>: function, no default</p>
+<p>Style the positionals part of generated usage, if any, as defined by <a href="#positional">positional</a>.</p>
+</li>
+<li><p>&nbsp;<code>usageCommandPlaceholder</code>: function, no default</p>
+<p>Style the command placeholder part of generated usage, if commands are defined, i.e. <code>&#39;&lt;command&gt;&#39;</code></p>
+</li>
+<li><p>&nbsp;<code>usageArgsPlaceholder</code>: function, no default</p>
+<p>Style the args placeholder part of generated usage, if a defined command has positional args, i.e. <code>&#39;&lt;args&gt;&#39;</code></p>
+</li>
+<li><p>&nbsp;<code>usageOptionsPlaceholder</code>: function, no default</p>
+<p>Style the options placeholder part of generated usage, if options are defined, i.e. <code>&#39;[options]&#39;</code></p>
+</li>
+<li><p>&nbsp;<code>group</code>: function, no default</p>
+<p>Style each group header for defined types in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>flags</code>: function, no default</p>
+<p>Style the flags for each defined type in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>desc</code>: function, no default</p>
+<p>Style the description for each defined type in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>hints</code>: function, no default</p>
+<p>Style the generated hints for each defined type in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>groupError</code>: function, default is <code>group</code> style</p>
+<p>Style each group header for types that have validation errors.</p>
+</li>
+<li><p>&nbsp;<code>flagsError</code>: function, default is <code>flags</code> style</p>
+<p>Style the flags for each type that has a validation error.</p>
+</li>
+<li><p>&nbsp;<code>descError</code>: function, default is <code>desc</code> style</p>
+<p>Style the description for each type that has a validation error.</p>
+</li>
+<li><p>&nbsp;<code>hintsError</code>: function, default is <code>hints</code> style</p>
+<p>Style the generated hints for each type that has a validation error.</p>
+</li>
+<li><p>&nbsp;<code>messages</code>: function, no default</p>
+<p>Style the validation error messages.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">const</span> chalk <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'chalk'</span><span class="token punctuation">)</span>
+sywac<span class="token punctuation">.</span><span class="token function">style</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// style usage components</span>
+  usagePrefix<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> chalk<span class="token punctuation">.</span><span class="token function">white</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">' '</span> <span class="token operator">+</span> chalk<span class="token punctuation">.</span><span class="token function">magenta</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  usageCommandPlaceholder<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">magenta</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  usagePositionals<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">green</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  usageArgsPlaceholder<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">green</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  usageOptionsPlaceholder<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span>green<span class="token punctuation">.</span><span class="token function">dim</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token comment" spellcheck="true">// style normal help text</span>
+  group<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">white</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  flags<span class="token punctuation">:</span> <span class="token punctuation">(</span>str<span class="token punctuation">,</span> type<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> style <span class="token operator">=</span> type<span class="token punctuation">.</span>datatype <span class="token operator">===</span> <span class="token string">'command'</span> <span class="token operator">?</span> chalk<span class="token punctuation">.</span>magenta <span class="token punctuation">:</span> chalk<span class="token punctuation">.</span>green
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">'-'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> style <span class="token operator">=</span> style<span class="token punctuation">.</span>dim
+    <span class="token keyword">return</span> <span class="token function">style</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  desc<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">cyan</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  hints<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">dim</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token comment" spellcheck="true">// use different style when a type is invalid</span>
+  groupError<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">red</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  flagsError<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">red</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  descError<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">yellow</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  hintsError<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">red</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token comment" spellcheck="true">// style error messages</span>
+  messages<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">red</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/style-hooks.html">Style Hooks</a> for further details and examples.</p>
 <p><a name="usage"></a></p>
-<h2 id="usage-usage"><a href="#usage-usage" class="headerlink" title=".usage(usage)"></a><code>.usage(usage)</code></h2><blockquote>
-<p>Needs docs!</p>
-</blockquote>
+<h2 id="usage-usage"><a href="#usage-usage" class="headerlink" title=".usage(usage)"></a><code>.usage(usage)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Define your own static usage string for help text, or customize each part of the generated usage string.</p>
+<ul>
+<li><p>&nbsp;<code>usage</code>: string or object</p>
+<p>If <code>usage</code> is a string, it defines the full usage string portion of generated help text, disabling the auto-generated usage string.</p>
+<p>If <code>usage</code> is an object, it may define the following properties:</p>
+<ul>
+<li><p>&nbsp;<code>usage</code>: string, default is auto-generated</p>
+<p>Defines the full usage string, disabling the auto-generated one.</p>
+</li>
+<li><p>&nbsp;<code>prefix</code>: string, default <code>&#39;Usage: $0&#39;</code></p>
+<p>Defines the prefix part of the generated usage string.</p>
+<p>The <code>$0</code> will be replaced with the program name and any necessary commands.</p>
+</li>
+<li><p>&nbsp;<code>commandPlaceholder</code>: string, default <code>&#39;&lt;command&gt;&#39;</code></p>
+<p>Defines the command placeholder part of the generated usage string.</p>
+<p>Only used if commands are defined.</p>
+</li>
+<li><p>&nbsp;<code>argsPlaceholder</code>: string, default <code>&#39;&lt;args&gt;&#39;</code></p>
+<p>Defines the args placeholder part of the generated usage string.</p>
+<p>Only used if a command is defined with positional args.</p>
+</li>
+<li><p>&nbsp;<code>optionsPlaceholder</code>: string, default <code>&#39;[options]&#39;</code></p>
+<p>Defines the options placeholder part of the generated usage string.</p>
+<p>Only used if flagged options are defined.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">usage</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  prefix<span class="token punctuation">:</span> <span class="token string">'Usage:\n  $0'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/help-text.html">Help Text</a> for further details and examples.</p>
 <p><a name="version"></a></p>
 <h2 id="version-flags-opts"><a href="#version-flags-opts" class="headerlink" title=".version(flags, opts)"></a><code>.version(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
 <p>Add a flagged option that should be parsed as a boolean and trigger output of the program version number.</p>
