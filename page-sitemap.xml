@@ -7,6 +7,13 @@
     </url>
     
     <url>
+        <loc>http://sywac.io/docs/async-parsing.html</loc>
+        <lastmod>2017-08-25T15:09:34.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
         <loc>http://sywac.io/docs/sync-config.html</loc>
         <lastmod>2017-08-01T04:23:32.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -240,13 +247,6 @@
     <url>
         <loc>http://sywac.io/docs/help-text.html</loc>
         <lastmod>2017-07-09T04:19:50.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>http://sywac.io/docs/async-parsing.html</loc>
-        <lastmod>2017-07-09T04:18:43.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>

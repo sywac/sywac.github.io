@@ -48,10 +48,89 @@
     <section class="content wrap documentationContent">
       <div class="inner-content">
   <!-- start "page.content" in page.ejs -->
-  <h1 id="Asynchronous-Parsing-Validation-Execution"><a href="#Asynchronous-Parsing-Validation-Execution" class="headerlink" title="Asynchronous Parsing, Validation, Execution"></a>Asynchronous Parsing, Validation, Execution</h1><blockquote>
-<p>No content yet</p>
-<p>Sorry! This site is still under construction. Please bear with us until we can fill out more documentation. Thank you!</p>
-</blockquote>
+  <h1 id="Asynchronous-Parsing-Validation-Execution"><a href="#Asynchronous-Parsing-Validation-Execution" class="headerlink" title="Asynchronous Parsing, Validation, Execution"></a>Asynchronous Parsing, Validation, Execution</h1><p>The API of sywac can be logically separated into two stages of an app’s lifecycle: First is <em>configuration</em>, and second is <em>execution</em>.</p>
+<p>This page covers the two <code>Api</code> methods designed for the execution stage.</p>
+<p><a name="parse"></a></p>
+<h2 id="parse-args"><a href="#parse-args" class="headerlink" title=".parse(args)"></a><code>.parse(args)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>Parse given <code>args</code> (or <code>process.argv</code>), validate them according to <a href="/docs/sync-config.html">configuration</a>, execute any commands found, and return the detailed results of execution on resolution.</p>
+<p>This method is suitable for any application use. It treats each call as a stateless operation, accepting the input it needs and returning (as a <code>Promise</code>) the output result. It makes no assumptions about the application and therefore does not call any methods like <code>console.log()</code> or <code>process.exit()</code>. Rather, any potential output content (like help text) or error status (like an exit code) is reported in the result.</p>
+<p>Note that this method is safe to use concurrently, meaning it is suitable for server-side apps that may handle many concurrent requests (e.g. a REST/HTTP service) or process many concurrent messages (e.g. a chatbot).</p>
+<ul>
+<li><p>&nbsp;<code>args</code>: string or array of strings, default <code>process.argv.slice(2)</code></p>
+<p>The arguments or message to parse, validate, and execute.</p>
+</li>
+</ul>
+<p>Returns a <code>Promise</code> that resolves to a result object, containing the following properties:</p>
+<ul>
+<li><p>&nbsp;<code>code</code>: number/integer</p>
+<p>Represents the exit code or error status of parsing, as the number of errors encountered.</p>
+<p>A value of <code>0</code> represents success, while a non-zero value means at least one validation or unexpected error occurred.</p>
+<p>Validation error messages will be included in <code>output</code> (typically along with help text) but will not be included in <code>errors</code>.</p>
+<p>Unexpected errors will be included in <code>errors</code> and formatted in <code>output</code>.</p>
+</li>
+<li><p>&nbsp;<code>output</code>: string</p>
+<p>Buffered content containing any messages (delimited by <code>&#39;\n&#39;</code>) resulting from parsing.</p>
+<p>It is intended that <code>output</code> is suitable as a formatted response to the user. In a CLI application, you can use <code>console.log(output)</code> or similar, which the <a href="#parseAndExit">parseAndExit</a> method will do for you.</p>
+<p>It is also intended that <code>output</code> will be an empty string unless errors occurred. While the framework sticks to this contract, any commands defined by the application are free to add their own messages to <code>output</code> via the <code>context.cliMessage(msg)</code> method, which may or may not represent error messages.</p>
+</li>
+<li><p>&nbsp;<code>errors</code>: array of any thrown (<code>Error</code>) objects</p>
+<p>Represents any unexpected errors that occurred during parsing, validation, or execution.</p>
+<p>Note that the framework does not explicitly throw or reject internally, so any errors encountered are either the result of incorrect <code>Api</code> usage, your application code (custom handlers), or bugs in the framework.</p>
+</li>
+<li><p>&nbsp;<code>argv</code>: object</p>
+<p>Represents the parsed arguments and options as key-value pairs, where each key is a configured alias of an argument/option and each value is the parsed/coerced value for that argument/option.</p>
+<p>For example, an option defined with flags <code>-s, --string &lt;value&gt;</code> would result in <code>argv.s</code> and <code>argv.string</code> having the same value.</p>
+<p>By default, <code>argv</code> will also contain a key of <code>_</code>, representing any unknown or unparsed flagless arguments as an array of strings, and keys for any unknown flagged options encountered, where each key represents the flag given and the value is either a boolean or a string.</p>
+<p>This means that sywac can be used without configuring the <code>Api</code> instance, but parsed values will be crude at best. We encourage you to leverage sywac’s rich type system by configuring the <code>Api</code> with all expected arguments/options before parsing.</p>
+</li>
+<li><p>&nbsp;<code>details</code>: object</p>
+<p>Represents parsing details, as an object containing the following properties:</p>
+<ul>
+<li><p>&nbsp;<code>args</code>: array of strings</p>
+<p>The args used for parsing, which is the same as input to this method, translated to an array.</p>
+</li>
+<li><p>&nbsp;<code>types</code>: array of objects</p>
+<p>Each object represents detailed parsing results for all expected/configured <code>Type</code> instances.</p>
+<p>Each object contains the following properties:</p>
+<ul>
+<li>&nbsp;<code>parent</code>: string, represents the command level the <code>Type</code> applies to</li>
+<li>&nbsp;<code>aliases</code>: array of strings, all configured aliases for the <code>Type</code> instance</li>
+<li>&nbsp;<code>datatype</code>: string, the underlying datatype represented by the <code>Type</code> instance</li>
+<li>&nbsp;<code>value</code>: any, the parsed/coerced value of the <code>Type</code> instance</li>
+<li>&nbsp;<code>source</code>: string, represents how the input value was defined (e.g. <code>&#39;default&#39;</code>, <code>&#39;flag&#39;</code>, <code>&#39;positional&#39;</code>, <code>&#39;env&#39;</code>)</li>
+<li>&nbsp;<code>position</code>: array of numbers, represents the indexes (if any) in <code>args</code> used as input values for this <code>Type</code> instance</li>
+<li>&nbsp;<code>raw</code>: array of strings, represents the unparsed input values for this <code>Type</code> instance</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Example passing an explicit message to parse:</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">const</span> msg <span class="token operator">=</span> <span class="token string">'hello --name world'</span>
+sywac<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>result <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>JSON<span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span>output<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token function">respond</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>output<span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span>code <span class="token operator">!==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token function">respond</span><span class="token punctuation">(</span><span class="token string">'Error!'</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span>errors<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token function">respond</span><span class="token punctuation">(</span><span class="token string">'Success'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p><a name="parseAndExit"></a></p>
+<h2 id="parseAndExit-args"><a href="#parseAndExit-args" class="headerlink" title=".parseAndExit(args)"></a><code>.parseAndExit(args)</code></h2><p><sup>Since 1.0.0</sup></p>
+<p>This method is a wrapper around the <a href="#parse">parse method</a> that is suitable for CLI apps.</p>
+<p>If the result of parsing/validation/execution includes output (i.e. help text or validation messages) or indicates an error (i.e. <code>result.code !== 0</code>), then this method will automatically print the output to stdout (via <code>console.log()</code>) and exit the process (via <code>process.exit(result.code)</code>).</p>
+<p>If the result does not include output and has a zero exit code, then a <code>Promise</code> is returned that resolves to <code>result.argv</code>. If your app logic needs access to the detailed results (beyond just the parsed <code>argv</code>), use the <a href="#parse">parse method</a> instead.</p>
+<p>Note that in a command-driven app, it may be perfectly reasonable to call this method and do nothing with the returned <code>Promise</code>, because command execution will have already completed.</p>
+<ul>
+<li><p>&nbsp;<code>args</code>: string or array of strings, default <code>process.argv.slice(2)</code></p>
+<p>The arguments or message to parse, validate, and execute.</p>
+</li>
+</ul>
+<p>Returns a <code>Promise</code> that resolves to the <code>argv</code> object (subproperty of detailed results) representing the parsed arguments and options as key-value pairs, where each key is a configured alias of an argument/option and each value is the parsed/coerced value for that argument/option. See further description in the <a href="#parse">parse method</a>.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">parseAndExit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>argv <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>argv<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
 
   <!-- end "page.content" in page.ejs -->
   
