@@ -869,7 +869,7 @@ sywac<span class="token punctuation">.</span><span class="token function">prefac
 <p>Style the flags for each defined type in generated help text.</p>
 </li>
 <li><p>&nbsp;<code>desc</code>: function, no default</p>
-<p>Style the description for each defined type in generated help text.</p>
+<p>Style the description for each defined type and example in generated help text.</p>
 </li>
 <li><p>&nbsp;<code>hints</code>: function, no default</p>
 <p>Style the generated hints for each defined type in generated help text.</p>
@@ -888,6 +888,12 @@ sywac<span class="token punctuation">.</span><span class="token function">prefac
 </li>
 <li><p>&nbsp;<code>messages</code>: function, no default</p>
 <p>Style the validation error messages.</p>
+</li>
+<li><p>&nbsp;<code>example</code>: function, default is <code>flags</code> style (since 1.1.0)</p>
+<p>Style each example command in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>all</code>: function, no default (since 1.1.0)</p>
+<p>A hook to modify the rendered/styled help text as a whole.</p>
 </li>
 </ul>
 </li>
@@ -913,6 +919,12 @@ sywac<span class="token punctuation">.</span><span class="token function">style<
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
   desc<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">cyan</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
   hints<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">dim</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  example<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> chalk<span class="token punctuation">.</span><span class="token function">yellow</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span>
+      str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>word <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> word<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">'-'</span><span class="token punctuation">)</span> <span class="token operator">?</span> chalk<span class="token punctuation">.</span>green<span class="token punctuation">.</span><span class="token function">dim</span><span class="token punctuation">(</span>word<span class="token punctuation">)</span> <span class="token punctuation">:</span> chalk<span class="token punctuation">.</span><span class="token function">gray</span><span class="token punctuation">(</span>word<span class="token punctuation">)</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
   <span class="token comment" spellcheck="true">// use different style when a type is invalid</span>
   groupError<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">red</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
   flagsError<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">red</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
