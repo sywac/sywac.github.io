@@ -51,7 +51,7 @@
   <h1 id="Synchronous-Configuration"><a href="#Synchronous-Configuration" class="headerlink" title="Synchronous Configuration"></a>Synchronous Configuration</h1><p>The API of sywac can be logically separated into two stages of an app’s lifecycle: First is <em>configuration</em>, and second is <em>execution</em>.</p>
 <p>This page covers all the methods designed for the configuration stage. Use these methods to configure an <a href="/docs/api-and-types.html"><code>Api</code> instance</a>, which mainly consists of telling it what types to expect (e.g. arguments, options, and commands), defining validation and control flow, and tweaking help text settings.</p>
 <p>The following methods are listed in alphabetical order.</p>
-<p><a href="#array">.array(flags, opts)</a><br><a href="#boolean">.boolean(flags, opts)</a><br><a href="#check">.check(handler)</a><br><a href="#command">.command(dsl, opts)</a><br><a href="#configure">.configure(opts)</a><br><a href="#custom">.custom(type)</a><br><a href="#dir">.dir(flags, opts)</a><br><a href="#enumeration">.enumeration(flags, opts)</a><br><a href="#epilogue">.epilogue(epilogue)</a><br><a href="#example">.example(example, opts)</a><br><a href="#exampleOrder">.exampleOrder(orderArray)</a><br><a href="#file">.file(flags, opts)</a><br><a href="#groupOrder">.groupOrder(orderArray)</a><br><a href="#help">.help(flags, opts)</a><br><a href="#number">.number(flags, opts)</a><br><a href="#numberArray">.numberArray(flags, opts)</a><br><a href="#option">.option(flags, opts)</a><br><a href="#outputSettings">.outputSettings(settings)</a><br><a href="#path">.path(flags, opts)</a><br><a href="#positional">.positional(dsl, opts)</a><br><a href="#preface">.preface(icon, slogan)</a><br><a href="#registerFactory">.registerFactory(name, factory)</a><br><a href="#showHelpByDefault">.showHelpByDefault(boolean)</a><br><a href="#string">.string(flags, opts)</a><br><a href="#stringArray">.stringArray(flags, opts)</a><br><a href="#style">.style(hooks)</a><br><a href="#usage">.usage(usage)</a><br><a href="#version">.version(flags, opts)</a></p>
+<p><a href="#array">.array(flags, opts)</a><br><a href="#boolean">.boolean(flags, opts)</a><br><a href="#check">.check(handler)</a><br><a href="#command">.command(dsl, opts)</a><br><a href="#commandDirectory">.commandDirectory(dir, opts)</a><br><a href="#configure">.configure(opts)</a><br><a href="#custom">.custom(type)</a><br><a href="#dir">.dir(flags, opts)</a><br><a href="#enumeration">.enumeration(flags, opts)</a><br><a href="#epilogue">.epilogue(epilogue)</a><br><a href="#example">.example(example, opts)</a><br><a href="#exampleOrder">.exampleOrder(orderArray)</a><br><a href="#file">.file(flags, opts)</a><br><a href="#groupOrder">.groupOrder(orderArray)</a><br><a href="#help">.help(flags, opts)</a><br><a href="#number">.number(flags, opts)</a><br><a href="#numberArray">.numberArray(flags, opts)</a><br><a href="#option">.option(flags, opts)</a><br><a href="#outputSettings">.outputSettings(settings)</a><br><a href="#path">.path(flags, opts)</a><br><a href="#positional">.positional(dsl, opts)</a><br><a href="#preface">.preface(icon, slogan)</a><br><a href="#registerFactory">.registerFactory(name, factory)</a><br><a href="#showHelpByDefault">.showHelpByDefault(boolean)</a><br><a href="#string">.string(flags, opts)</a><br><a href="#stringArray">.stringArray(flags, opts)</a><br><a href="#style">.style(hooks)</a><br><a href="#usage">.usage(usage)</a><br><a href="#version">.version(flags, opts)</a></p>
 <p><a name="array"></a></p>
 <h2 id="array-flags-opts"><a href="#array-flags-opts" class="headerlink" title=".array(flags, opts)"></a><code>.array(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
 <p>Add a flagged option that should be parsed as an array.</p>
@@ -212,6 +212,61 @@ sywac<span class="token punctuation">.</span><span class="token function">comman
 sywac<span class="token punctuation">.</span><span class="token function">command</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./commands/install'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 </code></pre>
 <p>Commands are a big topic. See <a href="/docs/command-type.html">Command</a> or any of the COMMANDS pages for further details and examples.</p>
+<p><a name="commandDirectory"></a></p>
+<h2 id="commandDirectory-dir-opts"><a href="#commandDirectory-dir-opts" class="headerlink" title=".commandDirectory(dir, opts)"></a><code>.commandDirectory(dir, opts)</code></h2><p><sup>Since 1.2.0</sup></p>
+<p>Load all files in the given directory and add each as a command module.</p>
+<p>This is a convenient alternative to calling the <a href="#command">command method</a> multiple times.</p>
+<p>For example, instead of this:</p>
+<pre class=" language-js"><code class="language-js">sywac
+  <span class="token punctuation">.</span><span class="token function">command</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./commands/one'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">command</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./commands/two'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">command</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./commands/three'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>you could do this:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">commandDirectory</span><span class="token punctuation">(</span><span class="token string">'commands'</span><span class="token punctuation">)</span>
+</code></pre>
+<p>In order for a command module to be added, it must export one of the following (at least):</p>
+<ol>
+<li>An object with a <code>flags</code> or <code>aliases</code> property (to define command dsl or aliases)</li>
+<li>A function (used as the <code>run</code> handler, command alias will be the filename)</li>
+</ol>
+<p>Any modules encountered that do not meet these criteria will be ignored.</p>
+<p>Any files (matching the required extensions) that exist in the directory and cannot be loaded via <code>require()</code> will cause this method to throw an error.</p>
+<ul>
+<li><p>&nbsp;<code>dir</code>: string, default is equivalent of <code>&#39;.&#39;</code></p>
+<p>The path to the directory to load modules from.</p>
+<p>It can be relative to the file calling this method, or it can be absolute.</p>
+<p>If not given, the directory of the calling file will be used (i.e. sibling files will be loaded).</p>
+<p>If a directory is given that does not exist, this method will throw an error.</p>
+<p>Nested directories in <code>dir</code> will be ignored.</p>
+</li>
+<li><p>&nbsp;<code>opts</code>: object or function, default <code>{ extensions: [&#39;.js&#39;] }</code></p>
+<p>The following configuration properties are supported:</p>
+<ul>
+<li><code>extensions</code>: array of strings, files in <code>dir</code> must have one of these extensions</li>
+</ul>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Examples:</p>
+<pre class=" language-js"><code class="language-js"><span class="token comment" spellcheck="true">// relative 1</span>
+sywac<span class="token punctuation">.</span><span class="token function">commandDirectory</span><span class="token punctuation">(</span><span class="token string">'commands'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// relative 2</span>
+sywac<span class="token punctuation">.</span><span class="token function">commandDirectory</span><span class="token punctuation">(</span><span class="token string">'./commands'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// absolute</span>
+sywac<span class="token punctuation">.</span><span class="token function">commandDirectory</span><span class="token punctuation">(</span><span class="token string">'/home/user/commands'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// equivalent of __dirname</span>
+sywac<span class="token punctuation">.</span><span class="token function">commandDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// optionally specify required file extensions</span>
+sywac<span class="token punctuation">.</span><span class="token function">commandDirectory</span><span class="token punctuation">(</span><span class="token string">'src/commands'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  extensions<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'.js'</span><span class="token punctuation">,</span> <span class="token string">'.coffee'</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>See <a href="/docs/command-modules.html">Command Modules</a> for further details and examples.</p>
 <p><a name="configure"></a></p>
 <h2 id="configure-opts"><a href="#configure-opts" class="headerlink" title=".configure(opts)"></a><code>.configure(opts)</code></h2><p><sup>Since 1.0.0</sup></p>
 <p>Configure the <code>Api</code> instance directly.</p>

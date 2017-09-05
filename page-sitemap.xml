@@ -8,14 +8,28 @@
     
     <url>
         <loc>http://sywac.io/docs/sync-config.html</loc>
-        <lastmod>2017-09-01T15:10:15.000Z</lastmod>
+        <lastmod>2017-09-05T17:04:07.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>http://sywac.io/about/comparison-matrix.html</loc>
+        <lastmod>2017-09-05T17:00:55.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
         <loc>http://sywac.io/about/roadmap.html</loc>
-        <lastmod>2017-09-01T14:27:47.000Z</lastmod>
+        <lastmod>2017-09-05T17:00:13.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>http://sywac.io/docs/help-text.html</loc>
+        <lastmod>2017-09-05T16:22:14.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -44,13 +58,6 @@
     <url>
         <loc>http://sywac.io/about/</loc>
         <lastmod>2017-07-30T03:52:56.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>http://sywac.io/about/comparison-matrix.html</loc>
-        <lastmod>2017-07-30T03:41:49.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -240,13 +247,6 @@
     <url>
         <loc>http://sywac.io/docs/style-hooks.html</loc>
         <lastmod>2017-07-09T04:20:47.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>http://sywac.io/docs/help-text.html</loc>
-        <lastmod>2017-07-09T04:19:50.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
