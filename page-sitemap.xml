@@ -7,8 +7,15 @@
     </url>
     
     <url>
+        <loc>http://sywac.io/docs/help-text.html</loc>
+        <lastmod>2017-10-29T21:46:34.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
         <loc>http://sywac.io/docs/sync-config.html</loc>
-        <lastmod>2017-09-05T17:04:07.000Z</lastmod>
+        <lastmod>2017-10-17T18:52:01.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -23,13 +30,6 @@
     <url>
         <loc>http://sywac.io/about/roadmap.html</loc>
         <lastmod>2017-09-05T17:00:13.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>http://sywac.io/docs/help-text.html</loc>
-        <lastmod>2017-09-05T16:22:14.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
