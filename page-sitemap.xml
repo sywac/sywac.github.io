@@ -7,6 +7,13 @@
     </url>
     
     <url>
+        <loc>http://sywac.io/docs/type-properties.html</loc>
+        <lastmod>2020-03-29T19:17:29.810Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
         <loc>http://sywac.io/docs/help-text.html</loc>
         <lastmod>2017-10-29T21:46:34.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -191,13 +198,6 @@
     <url>
         <loc>http://sywac.io/docs/boolean-type.html</loc>
         <lastmod>2017-07-09T04:28:54.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>http://sywac.io/docs/type-properties.html</loc>
-        <lastmod>2017-07-09T04:28:02.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
