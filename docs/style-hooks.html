@@ -48,9 +48,115 @@
     <section class="content wrap documentationContent">
       <div class="inner-content">
   <!-- start "page.content" in page.ejs -->
-  <h1 id="Style-Hooks"><a href="#Style-Hooks" class="headerlink" title="Style Hooks"></a>Style Hooks</h1><blockquote>
-<p>No content yet</p>
-<p>Sorry! This site is still under construction. Please bear with us until we can fill out more documentation. Thank you!</p>
+  <h1 id="Style-Hooks"><a href="#Style-Hooks" class="headerlink" title="Style Hooks"></a>Style Hooks</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>By default, sywac doesn’t apply any coloring or styling to the text it generates. Using the <code>style()</code> configuration method, you can provide an object containing hooks used to style various parts of the generated text, including help text, parameters, examples, error messages, etc.</p>
+<h2 id="Supported-Style-Hooks"><a href="#Supported-Style-Hooks" class="headerlink" title="Supported Style Hooks"></a>Supported Style Hooks</h2><p>The hooks currently supported are:</p>
+<ul>
+<li><p>&nbsp;<code>usagePrefix</code>: function, no default</p>
+<p>Style the prefix part of generated usage, i.e. <code>&#39;Usage: program&#39;</code></p>
+</li>
+<li><p>&nbsp;<code>usagePositionals</code>: function, no default</p>
+<p>Style the positionals part of generated usage, if any, as defined by <a href="#positional">positional</a>.</p>
+</li>
+<li><p>&nbsp;<code>usageCommandPlaceholder</code>: function, no default</p>
+<p>Style the command placeholder part of generated usage, if commands are defined, i.e. <code>&#39;&lt;command&gt;&#39;</code></p>
+</li>
+<li><p>&nbsp;<code>usageArgsPlaceholder</code>: function, no default</p>
+<p>Style the args placeholder part of generated usage, if a defined command has positional args, i.e. <code>&#39;&lt;args&gt;&#39;</code></p>
+</li>
+<li><p>&nbsp;<code>usageOptionsPlaceholder</code>: function, no default</p>
+<p>Style the options placeholder part of generated usage, if options are defined, i.e. <code>&#39;[options]&#39;</code></p>
+</li>
+<li><p>&nbsp;<code>group</code>: function, no default</p>
+<p>Style each group header for defined types in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>flags</code>: function, no default</p>
+<p>Style the flags for each defined type in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>desc</code>: function, no default</p>
+<p>Style the description for each defined type and example in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>hints</code>: function, no default</p>
+<p>Style the generated hints for each defined type in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>groupError</code>: function, default is <code>group</code> style</p>
+<p>Style each group header for types that have validation errors.</p>
+</li>
+<li><p>&nbsp;<code>flagsError</code>: function, default is <code>flags</code> style</p>
+<p>Style the flags for each type that has a validation error.</p>
+</li>
+<li><p>&nbsp;<code>descError</code>: function, default is <code>desc</code> style</p>
+<p>Style the description for each type that has a validation error.</p>
+</li>
+<li><p>&nbsp;<code>hintsError</code>: function, default is <code>hints</code> style</p>
+<p>Style the generated hints for each type that has a validation error.</p>
+</li>
+<li><p>&nbsp;<code>messages</code>: function, no default</p>
+<p>Style the validation error messages.</p>
+</li>
+<li><p>&nbsp;<code>example</code>: function, default is <code>flags</code> style (since 1.1.0)</p>
+<p>Style each example command in generated help text.</p>
+</li>
+<li><p>&nbsp;<code>all</code>: function, no default (since 1.1.0)</p>
+<p>A hook to modify the rendered/styled help text as a whole.</p>
+</li>
+</ul>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><p>The most common use case for style hooks is to apply coloring, which you can do using your favorite coloring package (such as <code>chalk</code> or <code>kleur</code>). Here is a complete example that applies color to different parts of the help text.</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">const</span> chalk <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'chalk'</span><span class="token punctuation">)</span>
+sywac<span class="token punctuation">.</span><span class="token function">style</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// style usage components</span>
+  usagePrefix<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> chalk<span class="token punctuation">.</span><span class="token function">white</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">' '</span> <span class="token operator">+</span> chalk<span class="token punctuation">.</span><span class="token function">magenta</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  usageCommandPlaceholder<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">magenta</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  usagePositionals<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">green</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  usageArgsPlaceholder<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">green</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  usageOptionsPlaceholder<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span>green<span class="token punctuation">.</span><span class="token function">dim</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token comment" spellcheck="true">// style normal help text</span>
+  group<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">white</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  flags<span class="token punctuation">:</span> <span class="token punctuation">(</span>str<span class="token punctuation">,</span> type<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> style <span class="token operator">=</span> type<span class="token punctuation">.</span>datatype <span class="token operator">===</span> <span class="token string">'command'</span> <span class="token operator">?</span> chalk<span class="token punctuation">.</span>magenta <span class="token punctuation">:</span> chalk<span class="token punctuation">.</span>green
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">'-'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> style <span class="token operator">=</span> style<span class="token punctuation">.</span>dim
+    <span class="token keyword">return</span> <span class="token function">style</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  desc<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">cyan</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  hints<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">dim</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  example<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> chalk<span class="token punctuation">.</span><span class="token function">yellow</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span>
+      str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>word <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> word<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">'-'</span><span class="token punctuation">)</span> <span class="token operator">?</span> chalk<span class="token punctuation">.</span>green<span class="token punctuation">.</span><span class="token function">dim</span><span class="token punctuation">(</span>word<span class="token punctuation">)</span> <span class="token punctuation">:</span> chalk<span class="token punctuation">.</span><span class="token function">gray</span><span class="token punctuation">(</span>word<span class="token punctuation">)</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment" spellcheck="true">// use different style when a type is invalid</span>
+  groupError<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">red</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  flagsError<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">red</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  descError<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">yellow</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  hintsError<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">red</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token comment" spellcheck="true">// style error messages</span>
+  messages<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> chalk<span class="token punctuation">.</span><span class="token function">red</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<blockquote>
+<p>Tip:</p>
+<p>If you need to apply coloring within a section and style hooks aren’t granular enough, you can usually get by with some basic string manipulation. See the <code>flags</code> and <code>example</code> hooks above for examples of this approach.</p>
+</blockquote>
+<p>In addition to coloring, you can use style hooks to change case or suppress sections altogether.</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">style</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// show group headers as uppercase</span>
+  group<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> str<span class="token punctuation">.</span><span class="token function">toUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token comment" spellcheck="true">// don't show any descriptions</span>
+  desc<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> <span class="token string">''</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h2 id="Style-Packages"><a href="#Style-Packages" class="headerlink" title="Style Packages"></a>Style Packages</h2><p>Sywac styles can be distributed as stand-alone npm packages that are useable by multiple programs.</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">style</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac-style-basic'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Here is a list of sywac styles out in the wild.</p>
+<ul>
+<li><a href="https://github.com/sywac/sywac-style-basic" target="_blank" rel="external">sywac-style-basic</a></li>
+</ul>
+<blockquote>
+<p>Tip:</p>
+<p>Know of a sywac style package, or have created your own? Submit a pull request for this documentation and add it to the list!</p>
 </blockquote>
 
   <!-- end "page.content" in page.ejs -->
