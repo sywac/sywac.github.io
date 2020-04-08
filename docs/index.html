@@ -53,9 +53,8 @@
 </code></pre>
 <p>Then create a <code>cli.js</code> file with code similar to this:</p>
 <pre class=" language-javascript"><code class="language-javascript">#<span class="token operator">!</span><span class="token operator">/</span>usr<span class="token operator">/</span>bin<span class="token operator">/</span>env node
-<span class="token string">'use strict'</span>
 
-<span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> cli <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac'</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">positional</span><span class="token punctuation">(</span><span class="token string">'&lt;string>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> paramsDesc<span class="token punctuation">:</span> <span class="token string">'A required string argument'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">boolean</span><span class="token punctuation">(</span><span class="token string">'-b, --bool'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> desc<span class="token punctuation">:</span> <span class="token string">'A boolean option'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">number</span><span class="token punctuation">(</span><span class="token string">'-n, --num &lt;number>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> desc<span class="token punctuation">:</span> <span class="token string">'A number option'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
@@ -63,10 +62,15 @@
   <span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token string">'-v, --version'</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">showHelpByDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">outputSettings</span><span class="token punctuation">(</span><span class="token punctuation">{</span> maxWidth<span class="token punctuation">:</span> <span class="token number">75</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">parseAndExit</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>argv <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>JSON<span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>argv<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> cli
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> main <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> argv <span class="token operator">=</span> <span class="token keyword">await</span> cli<span class="token punctuation">.</span><span class="token function">parseAndExit</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>JSON<span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>argv<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span>require<span class="token punctuation">.</span>main <span class="token operator">===</span> module<span class="token punctuation">)</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
 <p>Make the <code>cli.js</code> file executable:</p>
 <pre class=" language-bash"><code class="language-bash">$ <span class="token function">chmod</span> +x cli.js
@@ -78,6 +82,10 @@
   <span class="token property">"bin"</span><span class="token operator">:</span> <span class="token string">"cli.js"</span>
 <span class="token punctuation">}</span>
 </code></pre>
+<blockquote>
+<p>Tip:</p>
+<p>You can use <code>npm init sywac</code> to easily set up the above and add sywac to your project.</p>
+</blockquote>
 <p>Then test it out. Without any arguments, it will print the help text.</p>
 <pre class=" language-bash"><code class="language-bash">$ ./cli.js
 Usage: cli <span class="token operator">&lt;</span>string<span class="token operator">></span> <span class="token punctuation">[</span>options<span class="token punctuation">]</span>

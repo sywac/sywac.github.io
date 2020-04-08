@@ -7,6 +7,13 @@
     </url>
     
     <url>
+        <loc>https://sywac.io/docs/</loc>
+        <lastmod>2020-04-08T05:40:41.189Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
         <loc>https://sywac.io/about/roadmap.html</loc>
         <lastmod>2020-04-08T05:23:39.231Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -58,13 +65,6 @@
     <url>
         <loc>https://sywac.io/</loc>
         <lastmod>2017-07-30T06:13:44.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>https://sywac.io/docs/</loc>
-        <lastmod>2017-07-30T05:56:23.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
