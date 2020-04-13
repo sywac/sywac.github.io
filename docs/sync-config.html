@@ -51,7 +51,7 @@
   <h1 id="Synchronous-Configuration"><a href="#Synchronous-Configuration" class="headerlink" title="Synchronous Configuration"></a>Synchronous Configuration</h1><p>The API of sywac can be logically separated into two stages of an app’s lifecycle: First is <em>configuration</em>, and second is <em>execution</em>.</p>
 <p>This page covers all the methods designed for the configuration stage. Use these methods to configure an <a href="/docs/api-and-types.html"><code>Api</code> instance</a>, which mainly consists of telling it what types to expect (e.g. arguments, options, and commands), defining validation and control flow, and tweaking help text settings.</p>
 <p>The following methods are listed in alphabetical order.</p>
-<p><a href="#array">.array(flags, opts)</a><br><a href="#boolean">.boolean(flags, opts)</a><br><a href="#check">.check(handler)</a><br><a href="#command">.command(dsl, opts)</a><br><a href="#commandDirectory">.commandDirectory(dir, opts)</a><br><a href="#configure">.configure(opts)</a><br><a href="#custom">.custom(type)</a><br><a href="#dir">.dir(flags, opts)</a><br><a href="#enumeration">.enumeration(flags, opts)</a><br><a href="#epilogue">.epilogue(epilogue)</a><br><a href="#example">.example(example, opts)</a><br><a href="#exampleOrder">.exampleOrder(orderArray)</a><br><a href="#file">.file(flags, opts)</a><br><a href="#groupOrder">.groupOrder(orderArray)</a><br><a href="#help">.help(flags, opts)</a><br><a href="#number">.number(flags, opts)</a><br><a href="#numberArray">.numberArray(flags, opts)</a><br><a href="#option">.option(flags, opts)</a><br><a href="#outputSettings">.outputSettings(settings)</a><br><a href="#path">.path(flags, opts)</a><br><a href="#positional">.positional(dsl, opts)</a><br><a href="#preface">.preface(icon, slogan)</a><br><a href="#registerFactory">.registerFactory(name, factory)</a><br><a href="#showHelpByDefault">.showHelpByDefault(boolean)</a><br><a href="#string">.string(flags, opts)</a><br><a href="#stringArray">.stringArray(flags, opts)</a><br><a href="#style">.style(hooks)</a><br><a href="#usage">.usage(usage)</a><br><a href="#version">.version(flags, opts)</a></p>
+<p><a href="#array">.array(flags, opts)</a><br><a href="#boolean">.boolean(flags, opts)</a><br><a href="#check">.check(handler)</a><br><a href="#command">.command(dsl, opts)</a><br><a href="#commandDirectory">.commandDirectory(dir, opts)</a><br><a href="#configure">.configure(opts)</a><br><a href="#custom">.custom(type)</a><br><a href="#dir">.dir(flags, opts)</a><br><a href="#enumeration">.enumeration(flags, opts)</a><br><a href="#epilogue">.epilogue(epilogue)</a><br><a href="#example">.example(example, opts)</a><br><a href="#exampleOrder">.exampleOrder(orderArray)</a><br><a href="#file">.file(flags, opts)</a><br><a href="#groupOrder">.groupOrder(orderArray)</a><br><a href="#help">.help(flags, opts)</a><br><a href="#number">.number(flags, opts)</a><br><a href="#numberArray">.numberArray(flags, opts)</a><br><a href="#option">.option(flags, opts)</a><br><a href="#outputSettings">.outputSettings(settings)</a><br><a href="#path">.path(flags, opts)</a><br><a href="#positional">.positional(dsl, opts)</a><br><a href="#preface">.preface(icon, slogan)</a><br><a href="#registerFactory">.registerFactory(name, factory)</a><br><a href="#showHelpByDefault">.showHelpByDefault(boolean)</a><br><a href="#strict">.strict(boolean)</a><br><a href="#string">.string(flags, opts)</a><br><a href="#stringArray">.stringArray(flags, opts)</a><br><a href="#style">.style(hooks)</a><br><a href="#usage">.usage(usage)</a><br><a href="#version">.version(flags, opts)</a></p>
 <p><a name="array"></a></p>
 <h2 id="array-flags-opts"><a href="#array-flags-opts" class="headerlink" title=".array(flags, opts)"></a><code>.array(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
 <p>Add a flagged option that should be parsed as an array.</p>
@@ -856,6 +856,35 @@ sywac<span class="token punctuation">.</span><span class="token function">prefac
 <p>Example:</p>
 <pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">showHelpByDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
+<p><a name="strict"></a></p>
+<h2 id="strict-boolean"><a href="#strict-boolean" class="headerlink" title=".strict(boolean)"></a><code>.strict(boolean)</code></h2><p><sup>Since 1.3.0</sup></p>
+<p>In <code>strict</code> mode, unrecognized flags and positional arguments will generate an error.</p>
+<ul>
+<li><p>&nbsp;<code>boolean</code>: boolean, default <code>true</code></p>
+<p>Whether to enable the mode or not.</p>
+<p>Any value other than <code>false</code> (including no value) will enable the mode.</p>
+</li>
+</ul>
+<p>Returns the <code>Api</code> instance for method chaining.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">strict</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<blockquote>
+<p>Tip:</p>
+<p>Default commands are considered unrecognized arguments, so if your program has a default command make sure to disable strict mode for that command.</p>
+<p>Example:</p>
+<pre class=" language-js"><code class="language-js">sywac
+  <span class="token punctuation">.</span><span class="token function">strict</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">command</span><span class="token punctuation">(</span><span class="token string">'start'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> run<span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'start'</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">command</span><span class="token punctuation">(</span><span class="token string">'stop'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> run<span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'stop'</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">command</span><span class="token punctuation">(</span><span class="token string">'*'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    setup<span class="token punctuation">:</span> sywac <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+      sywac<span class="token punctuation">.</span><span class="token function">strict</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    run<span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'default'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+</blockquote>
 <p><a name="string"></a></p>
 <h2 id="string-flags-opts"><a href="#string-flags-opts" class="headerlink" title=".string(flags, opts)"></a><code>.string(flags, opts)</code></h2><p><sup>Since 1.0.0</sup></p>
 <p>Add a flagged option that should be parsed as a string.</p>
@@ -1139,6 +1168,10 @@ sywac<span class="token punctuation">.</span><span class="token function">versio
   
   <span>Made with ♡ by <a href="https://github.com/nexdrew">nexdrew</a></span>
 </footer>
+<script src="/js/sywac.js"></script>
+<script>
+  SywacDocs.init()
+</script>
 
   </div>
   <script>

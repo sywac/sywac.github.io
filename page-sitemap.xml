@@ -7,6 +7,20 @@
     </url>
     
     <url>
+        <loc>https://sywac.io/docs/type-properties.html</loc>
+        <lastmod>2020-04-13T21:28:03.634Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://sywac.io/docs/sync-config.html</loc>
+        <lastmod>2020-04-13T21:28:03.634Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
         <loc>https://sywac.io/docs/</loc>
         <lastmod>2020-04-08T05:40:41.189Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -28,22 +42,8 @@
     </url>
     
     <url>
-        <loc>https://sywac.io/docs/type-properties.html</loc>
-        <lastmod>2020-03-29T19:17:29.810Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
         <loc>https://sywac.io/docs/help-text.html</loc>
         <lastmod>2017-10-29T21:46:34.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>https://sywac.io/docs/sync-config.html</loc>
-        <lastmod>2017-10-17T18:52:01.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>

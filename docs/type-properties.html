@@ -49,7 +49,7 @@
       <div class="inner-content">
   <!-- start "page.content" in page.ejs -->
   <h1 id="Common-Type-Properties"><a href="#Common-Type-Properties" class="headerlink" title="Common Type Properties"></a>Common Type Properties</h1><p><a name="desc"></a></p>
-<h2 id="desc-description"><a href="#desc-description" class="headerlink" title="desc / description"></a>desc / description</h2><p>The <code>desc</code> (or <code>description</code>) property controls the text displayed immediately to the<br>right of the option or argument in the generated help text.</p>
+<h2 id="desc-description"><a href="#desc-description" class="headerlink" title="desc / description"></a>desc / description</h2><p>The <code>desc</code> (or <code>description</code>) property controls the text displayed immediately to the right of the option or argument in the generated help text.</p>
 <p>If not specified, the description will be blank.</p>
 <pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">boolean</span><span class="token punctuation">(</span><span class="token string">'--confirm'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
   desc<span class="token punctuation">:</span> <span class="token string">'skip confirmation prompt'</span>
@@ -60,7 +60,7 @@
 </code></pre>
 <p>See also the <a href="#hints">hints</a> property.</p>
 <p><a name="group"></a></p>
-<h2 id="group"><a href="#group" class="headerlink" title="group"></a>group</h2><p>The <code>group</code> option allows you to organize options into multiple sections in the generated<br>help text. By default, commands are grouped under the section <code>Commands:</code>, positional<br>arguments are grouped under the section <code>Arguments:</code>, and flagged options are grouped<br>under <code>Options:</code>.</p>
+<h2 id="group"><a href="#group" class="headerlink" title="group"></a>group</h2><p>The <code>group</code> option allows you to organize options into multiple sections in the generated help text. By default, commands are grouped under the section <code>Commands:</code>, positional arguments are grouped under the section <code>Arguments:</code>, and flagged options are grouped under <code>Options:</code>.</p>
 <blockquote>
 <p>Tip:</p>
 <p>The text you specify will be used verbatim, so be sure to include the ending colon (<code>:</code>)<br>within your label if you want the colon in your section header.</p>
@@ -80,15 +80,15 @@
   hidden<span class="token punctuation">:</span> <span class="token boolean">true</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<p>You can also use it to slurp up extra positional arguments, without being displayed in the<br>arguments section.</p>
+<p>You can also use it to slurp up extra positional arguments, without being displayed in the arguments section.</p>
 <pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">positional</span><span class="token punctuation">(</span><span class="token string">'[users...]'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
   hidden<span class="token punctuation">:</span> <span class="token boolean">true</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <p><a name="hints"></a></p>
-<h2 id="hints"><a href="#hints" class="headerlink" title="hints"></a>hints</h2><p>The <code>hints</code> property controls the type information displayed to the far right of the<br>option or argument in the generated help text.</p>
-<p>By default, a hint will be generated automatically based on the type of the option -<br>for example, <code>[boolean]</code> or <code>[number]</code>.</p>
-<p>You can use this to display an optional option as if it was required, or to make the<br>hint more specific.</p>
+<h2 id="hints"><a href="#hints" class="headerlink" title="hints"></a>hints</h2><p>The <code>hints</code> property controls the type information displayed to the far right of the option or argument in the generated help text.</p>
+<p>By default, a hint will be generated automatically based on the type of the option - for example, <code>[boolean]</code> or <code>[number]</code>.</p>
+<p>You can use this to display an optional option as if it was required, or to make the hint more specific.</p>
 <pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">'--name &lt;name>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
   hints<span class="token punctuation">:</span> <span class="token string">'[required] [string]'</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -182,6 +182,10 @@ sywac<span class="token punctuation">.</span><span class="token function">array<
   
   <span>Made with ♡ by <a href="https://github.com/nexdrew">nexdrew</a></span>
 </footer>
+<script src="/js/sywac.js"></script>
+<script>
+  SywacDocs.init()
+</script>
 
   </div>
   <script>
