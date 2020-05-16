@@ -7,15 +7,22 @@
     </url>
     
     <url>
+        <loc>https://sywac.io/docs/style-hooks.html</loc>
+        <lastmod>2020-05-16T23:16:35.061Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
         <loc>https://sywac.io/docs/type-properties.html</loc>
-        <lastmod>2020-04-13T21:28:03.634Z</lastmod>
+        <lastmod>2020-05-16T23:12:24.454Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
         <loc>https://sywac.io/docs/sync-config.html</loc>
-        <lastmod>2020-04-13T21:28:03.634Z</lastmod>
+        <lastmod>2020-05-16T23:12:24.453Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -30,13 +37,6 @@
     <url>
         <loc>https://sywac.io/about/roadmap.html</loc>
         <lastmod>2020-04-08T05:23:39.231Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>https://sywac.io/docs/style-hooks.html</loc>
-        <lastmod>2020-04-08T04:49:09.986Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>

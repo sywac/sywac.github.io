@@ -55,7 +55,7 @@
 <p>Style the prefix part of generated usage, i.e. <code>&#39;Usage: program&#39;</code></p>
 </li>
 <li><p>&nbsp;<code>usagePositionals</code>: function, no default</p>
-<p>Style the positionals part of generated usage, if any, as defined by <a href="#positional">positional</a>.</p>
+<p>Style the positionals part of generated usage, if any, as defined by <a href="/docs/sync-config.html#positional">positional</a>.</p>
 </li>
 <li><p>&nbsp;<code>usageCommandPlaceholder</code>: function, no default</p>
 <p>Style the command placeholder part of generated usage, if commands are defined, i.e. <code>&#39;&lt;command&gt;&#39;</code></p>
@@ -152,11 +152,44 @@ sywac<span class="token punctuation">.</span><span class="token function">style<
 </code></pre>
 <p>Here is a list of sywac styles out in the wild.</p>
 <ul>
-<li><a href="https://github.com/sywac/sywac-style-basic" target="_blank" rel="external">sywac-style-basic</a></li>
+<li><a href="https://github.com/sywac/sywac-style-basic" target="_blank" rel="external">sywac-style-basic</a> (a simple style package)</li>
+<li><a href="https://github.com/TryGhost/Ghost-Utils/tree/master/packages/pretty-cli" target="_blank" rel="external">@tryghost/pretty-cli</a> (wraps sywac with its own style)</li>
 </ul>
 <blockquote>
 <p>Tip:</p>
 <p>Know of a sywac style package, or have created your own? Submit a pull request for this documentation and add it to the list!</p>
+</blockquote>
+<h2 id="Using-output-settings-in-your-style"><a href="#Using-output-settings-in-your-style" class="headerlink" title="Using output settings in your style"></a>Using output settings in your style</h2><p>Your style hooks also have access to the user’s <a href="/docs/sync-config.html#outputSettings">.outputSettings</a> configuration. Each property (such as <code>.indent</code>, <code>.lineSep</code>, etc.) is available as a property on <code>this</code>.</p>
+<p>Consider this styling of the usage string, which pushes the command line example down to the next line and adds a <code>$</code> (bash prompt) to the front:</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">style</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  usagePrefix<span class="token punctuation">:</span> str <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> chalk<span class="token punctuation">.</span><span class="token function">white</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span>
+      <span class="token string">'\n  $ '</span> <span class="token operator">+</span> chalk<span class="token punctuation">.</span><span class="token function">magenta</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// Usage:</span>
+<span class="token comment" spellcheck="true">//   $ myapp blah</span>
+</code></pre>
+<p>Although it works, it will look out-of-place in the user’s help text if they have modified the default settings.</p>
+<pre class=" language-js"><code class="language-js">sywac
+  <span class="token punctuation">.</span><span class="token function">outputSettings</span><span class="token punctuation">(</span><span class="token punctuation">{</span> indent<span class="token punctuation">:</span> <span class="token number">4</span><span class="token punctuation">,</span> examplePrefix<span class="token punctuation">:</span> <span class="token string">'% '</span><span class="token punctuation">,</span> lineSep<span class="token punctuation">:</span> <span class="token string">'\r\n'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">style</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sywac-style-your-cool-style'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>If you are designing a style to be used by other people in their programs, you can ensure it will work for as many people as possible by respecting the configured output settings.</p>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">style</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  usagePrefix<span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>str<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> chalk<span class="token punctuation">.</span><span class="token function">white</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span>
+      <span class="token template-string"><span class="token string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token keyword">this</span><span class="token punctuation">.</span>lineSep<span class="token interpolation-punctuation punctuation">}</span></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token keyword">this</span><span class="token punctuation">.</span>indent<span class="token interpolation-punctuation punctuation">}</span></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token keyword">this</span><span class="token punctuation">.</span>examplePrefix<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span> <span class="token operator">+</span> chalk<span class="token punctuation">.</span><span class="token function">magenta</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// Usage:\r</span>
+<span class="token comment" spellcheck="true">//     % myapp blah</span>
+</code></pre>
+<blockquote>
+<p>Tip:</p>
+<p>Don’t forget to use a standard function instead of an arrow function for your style hook if you need to access <code>this</code>.</p>
 </blockquote>
 
   <!-- end "page.content" in page.ejs -->
