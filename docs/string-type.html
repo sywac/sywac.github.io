@@ -48,10 +48,42 @@
     <section class="content wrap documentationContent">
       <div class="inner-content">
   <!-- start "page.content" in page.ejs -->
-  <h1 id="String"><a href="#String" class="headerlink" title="String"></a>String</h1><blockquote>
-<p>No content yet</p>
-<p>Sorry! This site is still under construction. Please bear with us until we can fill out more documentation. Thank you!</p>
+  <h1 id="String"><a href="#String" class="headerlink" title="String"></a>String</h1><p>The <code>String</code> type represents any user-entered value.</p>
+<h2 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h2><p><code>String</code> options and arguments support any of the <a href="/docs/type-properties.html">common type properties</a>.</p>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><p>Use the <a href="/docs/sync-config.html#string">.string</a> method to add a flagged option.</p>
+<pre class=" language-js"><code class="language-js">sywac
+  <span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">'-n, --name &lt;name>'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> desc<span class="token punctuation">:</span> <span class="token string">'specify your name'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">parseAndExit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>argv <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Hello, </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>argv<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">!`</span></span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<pre class=" language-console"><code class="language-console">$ my-app -n Jan
+Hello, Jan!
+</code></pre>
+<p><br></p>
+<p>The default value of a <code>String</code> is <code>undefined</code>.</p>
+<pre class=" language-console"><code class="language-console">$ my-app
+Hello, undefined!
+</code></pre>
+<p><br></p>
+<p>Use the <a href="/docs/sync-config.html#positional">.positional</a> method to add a positional argument.</p>
+<pre class=" language-js"><code class="language-js">sywac
+  <span class="token punctuation">.</span><span class="token function">positional</span><span class="token punctuation">(</span><span class="token string">'&lt;name:string>'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">parseAndExit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>argv <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Hello, </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>argv<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">!`</span></span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<pre class=" language-console"><code class="language-console">$ my-app Jan
+Hello, Jan!
+</code></pre>
+<p><br></p>
+<blockquote>
+<p>Tip:</p>
+<p>You don’t need to specify <code>:string</code>, because it is the default type for arguments.</p>
 </blockquote>
+<pre class=" language-js"><code class="language-js">sywac<span class="token punctuation">.</span><span class="token function">positional</span><span class="token punctuation">(</span><span class="token string">'&lt;name>'</span><span class="token punctuation">)</span>
+</code></pre>
+<p><br></p>
 
   <!-- end "page.content" in page.ejs -->
   
